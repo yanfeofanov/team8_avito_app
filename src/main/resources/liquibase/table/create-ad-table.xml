@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="create-user-table.1" author="AChumichev">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="ad"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ad">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="INT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="VARCHAR(500)"/>
+            <column name="description" type="VARCHAR(3000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>

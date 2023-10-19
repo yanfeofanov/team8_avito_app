@@ -8,6 +8,6 @@ public class CommentDto {
     private int author;
     private String authorImage;
     private String authorFirstName;
-    private String createdAt;
+    private long createdAt;
     private String text;
 }
