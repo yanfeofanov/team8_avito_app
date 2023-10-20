@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.ExtendedAdDto;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     )
@@ -37,7 +37,7 @@ public class AdsController {
     )
 
     @GetMapping()
-    public ResponseEntity<Collection<AdDto>> getAllAds() {
+    public ResponseEntity<Collection<ExtendedAdDto>> getAllAds() {
         return null;
     }
 
@@ -50,7 +50,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     ),
@@ -62,7 +62,7 @@ public class AdsController {
     )
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto properties, @RequestBody MultipartFile image) {
+    public ResponseEntity<ExtendedAdDto> addAd(@RequestBody ExtendedAdDto properties, @RequestBody MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
@@ -75,7 +75,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     ),
@@ -90,7 +90,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<AdDto> getAdById(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -117,7 +117,7 @@ public class AdsController {
     )
 
     @DeleteMapping("{id}")
-    public ResponseEntity<AdDto> removeAd(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> removeAd(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -130,7 +130,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     ),
@@ -150,7 +150,7 @@ public class AdsController {
     )
 
     @PatchMapping("{id}")
-    public ResponseEntity<AdDto> editAd(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> editAd(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -163,7 +163,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     ),
@@ -174,7 +174,7 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<AdDto> getAdByAuthorizedUser() {
+    public ResponseEntity<ExtendedAdDto> getAdByAuthorizedUser() {
         return ResponseEntity.ok().build();
     }
 
@@ -187,7 +187,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
-                                            schema = @Schema(implementation = AdDto.class)
+                                            schema = @Schema(implementation = ExtendedAdDto.class)
                                     )
                             }
                     ),
@@ -207,7 +207,7 @@ public class AdsController {
     )
 
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> editImageByAd(@PathVariable Long id, @RequestParam MultipartFile image) {
+    public ResponseEntity<ExtendedAdDto> editImageByAd(@PathVariable Long id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
