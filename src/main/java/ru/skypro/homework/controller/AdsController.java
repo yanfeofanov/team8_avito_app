@@ -62,7 +62,7 @@ public class AdsController {
     )
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto properties,@RequestBody MultipartFile image) {
+    public ResponseEntity<AdDto> addAd(@RequestBody AdDto properties, @RequestBody MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
@@ -90,7 +90,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<AdDto> getAdById(@PathVariable Long id){
+    public ResponseEntity<AdDto> getAdById(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -174,7 +174,7 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<AdDto> getAdByAuthorizedUser(){
+    public ResponseEntity<AdDto> getAdByAuthorizedUser() {
         return ResponseEntity.ok().build();
     }
 
@@ -206,8 +206,8 @@ public class AdsController {
             }
     )
 
-    @PatchMapping(value = "{id}/image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> editImageByAd(@PathVariable Long id,@RequestParam MultipartFile image) {
+    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDto> editImageByAd(@PathVariable Long id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
