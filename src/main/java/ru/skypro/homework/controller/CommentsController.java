@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,8 +43,8 @@ public class CommentsController {
             }
     )
     @GetMapping("{id}/comments")
-    public CommentDto[] getCommentsByAdId(@PathVariable int id) {
-        return new CommentDto[]{new CommentDto(), new CommentDto()};
+    public CommentsDto getCommentsByAdId(@Parameter(description = "уникальный идентификатор объявления") @PathVariable int id) {
+        return new CommentsDto();
     }
 
     @Operation(
@@ -70,7 +71,8 @@ public class CommentsController {
             }
     )
     @PostMapping("{id}/comments")
-    public CommentDto addCommentByAdId(@PathVariable int id, @RequestBody String text) {
+    public CommentDto addCommentByAdId(@Parameter(description = "уникальный идентификатор объявления") @PathVariable int id,
+                                       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария") @RequestBody String text) {
         return new CommentDto();
     }
 
@@ -96,7 +98,8 @@ public class CommentsController {
             }
     )
     @DeleteMapping("{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteAdCommentById(@PathVariable int adId, @PathVariable int commentId) {
+    public ResponseEntity<?> deleteAdCommentById(@Parameter(description = "уникальный идентификатор объявления") @PathVariable int adId,
+                                                 @Parameter(description = "уникальный идентификатор комментария") @PathVariable int commentId) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -128,7 +131,9 @@ public class CommentsController {
             }
     )
     @PatchMapping("{adId}/comments/{commentId}")
-    public CommentDto updateAdCommentById(@PathVariable int adId, @PathVariable int commentId, @RequestBody String text) {
+    public CommentDto updateAdCommentById(@Parameter(description = "уникальный идентификатор объявления") @PathVariable int adId,
+                                          @Parameter(description = "уникальный идентификатор комментария") @PathVariable int commentId,
+                                          @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария") @RequestBody String text) {
         return new CommentDto();
     }
 }
