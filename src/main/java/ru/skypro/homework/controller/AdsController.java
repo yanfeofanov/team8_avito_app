@@ -4,20 +4,26 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 
 import java.util.Collection;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000/ads")
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Ads controller", description = "объявления")
+@RequestMapping("ads")
 public class AdsController {
 
     @Operation(
@@ -29,7 +35,7 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = ExtendedAdDto.class)
+                                            schema = @Schema(implementation = AdsDto.class)
                                     )
                             }
                     )
@@ -37,7 +43,7 @@ public class AdsController {
     )
 
     @GetMapping()
-    public ResponseEntity<Collection<ExtendedAdDto>> getAllAds() {
+    public ResponseEntity<Collection<AdDto>> getAllAds() {
         return null;
     }
 
@@ -50,19 +56,23 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = ExtendedAdDto.class)
+                                            schema = @Schema(implementation = AdDto.class)
                                     )
                             }
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ExtendedAdDto> addAd(@RequestBody ExtendedAdDto properties, @RequestBody MultipartFile image) {
+    public ResponseEntity<AdDto> addAd(@RequestBody AdDto properties, @RequestBody MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
@@ -81,16 +91,24 @@ public class AdsController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Not found"
+                            description = "Not found",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAdById(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -99,19 +117,35 @@ public class AdsController {
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "No Content"
+                            description = "No Content",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "Forbidden"
+                            description = "Forbidden",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Not found"
+                            description = "Not found",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
@@ -130,27 +164,40 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = ExtendedAdDto.class)
+                                            schema = @Schema(implementation = AdDto.class)
                                     )
                             }
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "Forbidden"
+                            description = "Forbidden",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Not found"
+                            description = "Not found",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
 
     @PatchMapping("{id}")
-    public ResponseEntity<ExtendedAdDto> editAd(@PathVariable Long id) {
+    public ResponseEntity<ExtendedAdDto> updateAds(@PathVariable Long id,
+                                                   @RequestBody CreateOrUpdateAdDto properties) {
         return ResponseEntity.ok().build();
     }
 
@@ -163,18 +210,22 @@ public class AdsController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = ExtendedAdDto.class)
+                                            schema = @Schema(implementation = AdsDto.class)
                                     )
                             }
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<ExtendedAdDto> getAdByAuthorizedUser() {
+    public ResponseEntity<ExtendedAdDto> getAdsMe() {
         return ResponseEntity.ok().build();
     }
 
@@ -186,28 +237,39 @@ public class AdsController {
                             description = "OK",
                             content = {
                                     @Content(
-                                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
-                                            schema = @Schema(implementation = ExtendedAdDto.class)
+                                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
                                     )
                             }
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized"
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "Forbidden"
+                            description = "Forbidden",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Not found"
+                            description = "Not found",
+                            content = {
+                                    @Content(
+                                    )
+                            }
                     )
             }
     )
 
     @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ExtendedAdDto> editImageByAd(@PathVariable Long id, @RequestParam MultipartFile image) {
+    public ResponseEntity<ExtendedAdDto> updateImage(@PathVariable Long id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 }
