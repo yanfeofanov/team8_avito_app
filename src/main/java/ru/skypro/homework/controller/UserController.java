@@ -5,12 +5,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import liquibase.pro.packaged.N;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.CommentDto;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UserDto;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
 
 /**
  * класс содержит эндпойнты для работы с пользователеми и их данными
@@ -44,7 +44,8 @@ public class UserController {
             }
     )
     @PostMapping("/set_password/{id}")
-    public ResponseEntity<NewPassword> setPasswordForUser(@PathVariable(value = "id") int idUser) {
+    public ResponseEntity<NewPassword> setPasswordForUser(@PathVariable (value = "id") int userId,
+                                                          @RequestBody NewPassword newPassword) {
         return ResponseEntity.ok().build();
     }
     @Operation(
@@ -70,6 +71,57 @@ public class UserController {
     public ResponseEntity<UserDto> getUserInfo(@PathVariable int id) {
         return ResponseEntity.ok().build();
 
+    }
+    @Operation(
+            summary = "Обновление информации об авторизованном пользователе",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                            schema = @Schema(implementation = UserUpdatesData.class)
+                                    )
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    )
+            }
+    )
+    @PatchMapping("/me/{id}")
+    public ResponseEntity<UserUpdatesData> updateUserInfo(@PathVariable int id, @RequestBody UserUpdatesData data) {
+        return ResponseEntity.ok().build();
+
+    }
+    @Operation(
+            summary = "Обновление аватара авторизованного пользователя",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
+                                    )
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = {
+                                    @Content(
+                                    )
+                            }
+                    )
+
+            }
+    )
+    @PatchMapping(value = "/me/avatar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserDto> updateAvatar(@PathVariable int id, @RequestParam MultipartFile avatar) {
+        return ResponseEntity.ok().build();
     }
 
 }
