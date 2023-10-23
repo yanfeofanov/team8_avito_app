@@ -3,12 +3,15 @@ package ru.skypro.homework.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
-@Schema(description = "сущность комментарий")
+@Schema(description = "комментарий")
 public class CommentDto {
     @Schema(description = "уникальный идентификатор комментария", accessMode = Schema.AccessMode.READ_ONLY)
     private int pk;
     @Schema(description = "уникальный идентификатор автора комментария")
+    @NotEmpty
     private int author;
     @Schema(description = "ссылка на аватар автора комментария")
     private String authorImage;

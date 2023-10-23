@@ -16,6 +16,7 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Slf4j
@@ -72,7 +73,7 @@ public class AdsController {
     )
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAd(@RequestBody AdDto properties, @RequestBody MultipartFile image) {
+    public ResponseEntity<AdDto> addAd(@RequestBody @Valid AdDto properties, @RequestBody MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
@@ -197,7 +198,7 @@ public class AdsController {
 
     @PatchMapping("{id}")
     public ResponseEntity<ExtendedAdDto> updateAds(@PathVariable Long id,
-                                                   @RequestBody CreateOrUpdateAdDto properties) {
+                                                   @RequestBody @Valid CreateOrUpdateAdDto properties) {
         return ResponseEntity.ok().build();
     }
 

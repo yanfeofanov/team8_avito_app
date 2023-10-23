@@ -8,8 +8,8 @@ import java.util.Collection;
 @Data
 @Schema(description = "список комментариев к объявлению")
 public class CommentsDto {
-    @Schema(description = "количество комментариев к объявлению")
+    @Schema(description = "количество комментариев")
     private int count;
-    @Schema(description = "список комментариев")
+    @Schema(description = "сущности комментариев")
     private Collection<CommentDto> results;
 }
