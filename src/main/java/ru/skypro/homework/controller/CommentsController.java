@@ -9,11 +9,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * класс содержит эндпойнты для работы с комментариями пользователей к объявлениям
@@ -21,6 +23,7 @@ import javax.validation.constraints.Min;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @Tag(name = "Comments controller", description = "контроллер для работы с комментариями к объявлениям")
+@Validated
 @RequestMapping("ads")
 public class CommentsController {
     @Operation(
@@ -76,7 +79,8 @@ public class CommentsController {
     )
     @PostMapping("{id}/comments")
     public CommentDto addCommentByAdId(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int id,
-                                       @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария") String text) {
+                                       @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
+                                       @Size(min = 8, max = 64) String text) {
         return new CommentDto();
     }
 
@@ -137,7 +141,8 @@ public class CommentsController {
     @PatchMapping("{adId}/comments/{commentId}")
     public CommentDto updateAdCommentById(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int adId,
                                           @PathVariable @Parameter(description = "уникальный идентификатор комментария") int commentId,
-                                          @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария") String text) {
+                                          @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
+                                          @Size(min = 8, max = 64) String text) {
         return new CommentDto();
     }
 }

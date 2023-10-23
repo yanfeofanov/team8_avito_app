@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import liquibase.pro.packaged.N;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+
+import javax.validation.Valid;
 
 /**
  * класс содержит эндпойнты для работы с пользователеми и их данными
@@ -45,7 +46,7 @@ public class UserController {
     )
     @PostMapping("/set_password/{id}")
     public ResponseEntity<NewPassword> setPasswordForUser(@PathVariable (value = "id") int userId,
-                                                          @RequestBody NewPassword newPassword) {
+                                                          @RequestBody @Valid NewPassword newPassword) {
         return ResponseEntity.ok().build();
     }
     @Operation(
@@ -81,7 +82,7 @@ public class UserController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = UserUpdatesData.class)
+                                            schema = @Schema(implementation = UpdateUserDto.class)
                                     )
                             }
                     ),
@@ -92,7 +93,7 @@ public class UserController {
             }
     )
     @PatchMapping("/me/{id}")
-    public ResponseEntity<UserUpdatesData> updateUserInfo(@PathVariable int id, @RequestBody UserUpdatesData data) {
+    public ResponseEntity<UpdateUserDto> updateUserInfo(@PathVariable int id, @RequestBody @Valid UpdateUserDto data) {
         return ResponseEntity.ok().build();
 
     }
