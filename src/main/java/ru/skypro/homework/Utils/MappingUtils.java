@@ -5,7 +5,6 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.User;
-import ru.skypro.homework.repository.AdRepository;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -93,7 +92,7 @@ public class MappingUtils {
         userDto.setImage(user.getImage());
         userDto.setLastName(user.getLastName());
         userDto.setFirstName(user.getFirstName());
-        userDto.setRole(user.getRole().toString());
+        userDto.setRole(user.getRole());
         return userDto;
     }
 
