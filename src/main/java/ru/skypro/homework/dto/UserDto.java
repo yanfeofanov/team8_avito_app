@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Data
 @Schema(description = "сущность пользователь")
@@ -21,7 +20,7 @@ public class UserDto {
     private String phone;
     @NotBlank
     @Schema(description = "роль пользователя определяющая его права доступа")
-    private String role;
+    private Role role;
     @Schema(description = "ссылка на аватар пользователя")
     private String image;
 }

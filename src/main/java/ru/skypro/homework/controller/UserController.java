@@ -22,17 +22,11 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     @Operation(
-            summary = "Обновление пароля пользователя",
+            summary = "Обновление пароля",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "OK",
-                            content = {
-                                    @Content(
-                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = NewPassword.class)
-                                    )
-                            }
+                            description = "OK"
                     ),
                     @ApiResponse(
                             responseCode = "401",
@@ -44,11 +38,11 @@ public class UserController {
                     )
             }
     )
-    @PostMapping("/set_password/{id}")
-    public ResponseEntity<NewPassword> setPasswordForUser(@PathVariable (value = "id") int userId,
-                                                          @RequestBody @Valid NewPassword newPassword) {
+    @PostMapping("/set_password")
+    public ResponseEntity<?> setPasswordForUser(@RequestBody @Valid NewPassword newPassword) {
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получение информации об авторизованном пользователе",
             responses = {
@@ -68,11 +62,11 @@ public class UserController {
                     )
             }
     )
-    @GetMapping("/me/{id}")
-    public ResponseEntity<UserDto> getUserInfo(@PathVariable int id) {
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getUserInfo() {
         return ResponseEntity.ok().build();
-
     }
+
     @Operation(
             summary = "Обновление информации об авторизованном пользователе",
             responses = {
@@ -92,36 +86,27 @@ public class UserController {
                     )
             }
     )
-    @PatchMapping("/me/{id}")
-    public ResponseEntity<UpdateUserDto> updateUserInfo(@PathVariable int id, @RequestBody @Valid UpdateUserDto data) {
+    @PatchMapping("/me")
+    public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data) {
         return ResponseEntity.ok().build();
-
     }
+
     @Operation(
             summary = "Обновление аватара авторизованного пользователя",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "OK",
-                            content = {
-                                    @Content(
-                                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
-                                    )
-                            }
+                            description = "OK"
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Unauthorized",
-                            content = {
-                                    @Content(
-                                    )
-                            }
+                            description = "Unauthorized"
                     )
 
             }
     )
-    @PatchMapping(value = "/me/avatar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserDto> updateAvatar(@PathVariable int id, @RequestParam MultipartFile avatar) {
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile avatar) {
         return ResponseEntity.ok().build();
     }
 

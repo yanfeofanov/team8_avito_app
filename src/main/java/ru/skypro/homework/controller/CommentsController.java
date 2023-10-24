@@ -13,9 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
 
 /**
  * класс содержит эндпойнты для работы с комментариями пользователей к объявлениям
@@ -80,7 +80,7 @@ public class CommentsController {
     @PostMapping("{id}/comments")
     public CommentDto addCommentByAdId(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int id,
                                        @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
-                                       @Size(min = 8, max = 64) String text) {
+                                       @Valid CreateOrUpdateCommentDto createCommentDto) {
         return new CommentDto();
     }
 
@@ -142,7 +142,7 @@ public class CommentsController {
     public CommentDto updateAdCommentById(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int adId,
                                           @PathVariable @Parameter(description = "уникальный идентификатор комментария") int commentId,
                                           @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
-                                          @Size(min = 8, max = 64) String text) {
+                                          @Valid CreateOrUpdateCommentDto UpdateCommentDto) {
         return new CommentDto();
     }
 }
