@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="add-foreign-key-constraint.1" author="AChumichev">
+        <preConditions>
+            <tableExists tableName="ad"/>
+            <columnExists tableName="ad" columnName="user_id"/>
+            <columnExists tableName="ad" columnName="id"/>
+            <tableExists tableName="comment"/>
+            <columnExists tableName="comment" columnName="user_id"/>
+            <columnExists tableName="comment" columnName="ad_id"/>
+            <tableExists tableName="user"/>
+            <columnExists tableName="user" columnName="id"/>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ad"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_AD_USER"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="comment"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_COMMENT_USER"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="comment"
+                                 baseColumnNames="ad_id"
+                                 constraintName="FK_COMMENT_AD"
+                                 referencedTableName="ad"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
