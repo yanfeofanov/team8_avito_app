@@ -12,52 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class MappingUtils {
 
-    public AdDto mapToAdDto(Ad ad) {
-        AdDto adDto = new AdDto();
-        adDto.setPk(ad.getPk());
-        adDto.setTitle(ad.getTitle());
-        adDto.setPrice(ad.getPrice());
-        adDto.setAuthor(adDto.getAuthor());
-        adDto.setImage(adDto.getImage());
-        return adDto;
-    }
-
-    public ExtendedAdDto mapToExtendedAdDto(Ad ad) {
-        ExtendedAdDto extendedAdDto = new ExtendedAdDto();
-        extendedAdDto.setPk(ad.getPk());
-        extendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
-        extendedAdDto.setAuthorLastName(ad.getUser().getLastName());
-        extendedAdDto.setDescription(ad.getDescription());
-        extendedAdDto.setImage(ad.getImage());
-        extendedAdDto.setEmail(ad.getUser().getEmail());
-        extendedAdDto.setPhone(ad.getUser().getPhone());
-        extendedAdDto.setTitle(ad.getTitle());
-        extendedAdDto.setPrice(ad.getPrice());
-        return extendedAdDto;
-    }
-
-    public AdsDto mapToAdsDto(Collection<Ad> ads) {
-        AdsDto adsDto = new AdsDto();
-        adsDto.setCount(ads.size());
-        adsDto.setResults(ads.stream().map(this::mapToAdDto).collect(Collectors.toList()));
-        return adsDto;
-    }
-
-    public Ad mapToAd(CreateOrUpdateAdDto createOrUpdateAdDto, Ad ad) {
-        ad.setDescription(createOrUpdateAdDto.getDescription());
-        ad.setPrice(createOrUpdateAdDto.getPrice());
-        ad.setTitle(createOrUpdateAdDto.getTitle());
-        return ad;
-    }
-
-    public Ad mapToAd(CreateOrUpdateAdDto createOrUpdateAdDto) {
-        Ad ad = new Ad();
-        ad.setTitle(createOrUpdateAdDto.getTitle());
-        ad.setDescription(createOrUpdateAdDto.getDescription());
-        ad.setPrice(createOrUpdateAdDto.getPrice());
-        return ad;
-    }
-
     public CommentDto mapToCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getPk());
