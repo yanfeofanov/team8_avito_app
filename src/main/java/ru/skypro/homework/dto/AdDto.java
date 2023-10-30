@@ -26,17 +26,4 @@ public class AdDto {
     @Schema(description = "заголовок объявления")
     @NotBlank
     private String title;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AdDto adDto = (AdDto) o;
-        return pk == adDto.pk;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(pk);
-    }
 }
