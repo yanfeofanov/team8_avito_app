@@ -1,9 +1,15 @@
 package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
-@Data
+import java.util.Objects;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Schema(description = "расширенное представление объявления")
 public class ExtendedAdDto {
     @Schema(description = "уникальный идентификатор объявления", accessMode = Schema.AccessMode.READ_ONLY)
@@ -24,4 +30,17 @@ public class ExtendedAdDto {
     private int price;
     @Schema(description = "заголовок объявления")
     private String title;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExtendedAdDto that = (ExtendedAdDto) o;
+        return pk == that.pk;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pk);
+    }
 }

@@ -1,12 +1,17 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
+import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Table(name = "user")
 public class User {
     @Id
