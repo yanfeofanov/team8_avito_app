@@ -51,11 +51,7 @@ public class MappingUtils {
     }
 
     public Ad mapToAd(CreateOrUpdateAdDto createOrUpdateAdDto) {
-        Ad ad = new Ad();
-        ad.setTitle(createOrUpdateAdDto.getTitle());
-        ad.setDescription(createOrUpdateAdDto.getDescription());
-        ad.setPrice(createOrUpdateAdDto.getPrice());
-        return ad;
+        return mapToAd(createOrUpdateAdDto, new Ad());
     }
 
     public CommentDto mapToCommentDto(Comment comment) {

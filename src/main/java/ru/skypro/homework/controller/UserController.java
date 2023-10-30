@@ -106,7 +106,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile avatar) {
+    public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
