@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.Users;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -16,9 +16,9 @@ public class MappingUtils {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getPk());
         commentDto.setText(commentDto.getText());
-        commentDto.setAuthor(comment.getUser().getId());
-        commentDto.setAuthorFirstName(comment.getUser().getFirstName());
-        commentDto.setAuthorImage(comment.getUser().getImage());
+        commentDto.setAuthor(comment.getUsers().getId());
+        commentDto.setAuthorFirstName(comment.getUsers().getFirstName());
+        commentDto.setAuthorImage(comment.getUsers().getImage());
         return commentDto;
     }
 
@@ -29,43 +29,43 @@ public class MappingUtils {
         return commentsDto;
     }
 
-    public Comment mapToComment(CommentDto commentDto, Ad ad, User user) {
+    public Comment mapToComment(CommentDto commentDto, Ad ad, Users users) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setAd(ad);
-        comment.setUser(user);
+        comment.setUsers(users);
         comment.setCreatedAt(commentDto.getCreatedAt());
         return comment;
     }
 
-    public UserDto mapToUserDto(User user) {
+    public UserDto mapToUserDto(Users users) {
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setEmail(user.getEmail());
-        userDto.setPhone(user.getPhone());
-        userDto.setImage(user.getImage());
-        userDto.setLastName(user.getLastName());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setRole(user.getRole());
+        userDto.setId(users.getId());
+        userDto.setEmail(users.getEmail());
+        userDto.setPhone(users.getPhone());
+        userDto.setImage(users.getImage());
+        userDto.setLastName(users.getLastName());
+        userDto.setFirstName(users.getFirstName());
+        userDto.setRole(users.getRole());
         return userDto;
     }
 
-    public User mapToUser(Register register) {
-        User user = new User();
-        user.setFirstName(register.getFirstName());
-        user.setLastName(register.getLastName());
-        user.setRole(register.getRole());
-        user.setPhone(register.getPhone());
+    public Users mapToUser(Register register) {
+        Users users = new Users();
+        users.setFirstName(register.getFirstName());
+        users.setLastName(register.getLastName());
+        users.setRole(register.getRole());
+        users.setPhone(register.getPhone());
         //user.setEmail(register.getUsername());
-        user.setUsername(register.getUsername());
-        user.setPassword(register.getPassword());
-        return user;
+        users.setUsername(register.getUsername());
+        users.setPassword(register.getPassword());
+        return users;
     }
 
-    public User mapToUser(UpdateUserDto updateUserDto, User user) {
-        user.setFirstName(updateUserDto.getFirstName());
-        user.setLastName(updateUserDto.getLastName());
-        user.setPhone(updateUserDto.getPhone());
-        return user;
+    public Users mapToUser(UpdateUserDto updateUserDto, Users users) {
+        users.setFirstName(updateUserDto.getFirstName());
+        users.setLastName(updateUserDto.getLastName());
+        users.setPhone(updateUserDto.getPhone());
+        return users;
     }
 }

@@ -18,8 +18,8 @@ public class Ad {
     @Column(name = "id")
     private int pk;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private Users users;
     private int price;
     private String title;
     private String image;

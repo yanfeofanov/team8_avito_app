@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
+import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -26,6 +28,8 @@ import java.util.Collection;
 @Tag(name = "Ads controller", description = "объявления")
 @RequestMapping("ads")
 public class AdsController {
+
+    private final AdService adService;
 
     @Operation(
             summary = "Получение всех объявлений",
@@ -44,8 +48,8 @@ public class AdsController {
     )
 
     @GetMapping()
-    public ResponseEntity<Collection<AdDto>> getAllAds() {
-        return null;
+    public ResponseEntity<AdsDto> getAllAds() {
+        return new ResponseEntity<>(adService.getAllAds(), HttpStatus.OK);
     }
 
     @Operation(

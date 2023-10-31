@@ -13,8 +13,8 @@ public class Comment {
     @Column(name = "id")
     private int pk;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private Users users;
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
