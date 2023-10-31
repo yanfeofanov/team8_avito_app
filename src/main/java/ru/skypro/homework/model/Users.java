@@ -4,7 +4,6 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Setter
@@ -12,8 +11,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -23,7 +23,7 @@ public class AdMappers {
         adDto.setPk(ad.getPk());
         adDto.setTitle(ad.getTitle());
         adDto.setPrice(ad.getPrice());
-        adDto.setAuthor(ad.getUser().getId());
+        adDto.setAuthor(ad.getUsers().getId());
         adDto.setImage(ad.getImage());
         return adDto;
     }
@@ -32,12 +32,12 @@ public class AdMappers {
         Ad ad = adRepository.findByPk(id);
         ExtendedAdDto extendedAdDto = new ExtendedAdDto();
         extendedAdDto.setPk(ad.getPk());
-        extendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
-        extendedAdDto.setAuthorLastName(ad.getUser().getLastName());
+        extendedAdDto.setAuthorFirstName(ad.getUsers().getFirstName());
+        extendedAdDto.setAuthorLastName(ad.getUsers().getLastName());
         extendedAdDto.setDescription(ad.getDescription());
         extendedAdDto.setImage(ad.getImage());
-        extendedAdDto.setEmail(ad.getUser().getEmail());
-        extendedAdDto.setPhone(ad.getUser().getPhone());
+        extendedAdDto.setEmail(ad.getUsers().getEmail());
+        extendedAdDto.setPhone(ad.getUsers().getPhone());
         extendedAdDto.setTitle(ad.getTitle());
         extendedAdDto.setPrice(ad.getPrice());
         return extendedAdDto;

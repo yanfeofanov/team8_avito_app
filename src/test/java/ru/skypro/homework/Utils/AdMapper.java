@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repository.AdRepository;
 
 import java.util.List;
@@ -22,15 +22,15 @@ public class AdMapper {
     private AdRepository adRepository;
     @InjectMocks
     public AdMappers adMappers;
-    static final User user = new User(0,"firstName","lastName", Role.USER,
+    static final Users USERS = new Users(0,"firstName","lastName", Role.USER,
             "avatar","userName","password","mail.ru","89009009090");
-    static final Ad ad = new Ad(0,user,200,"title","image","description");
+    static final Ad ad = new Ad(0, USERS,200,"title","image","description");
     static final CreateOrUpdateAdDto createOrUpdateAdDto = new CreateOrUpdateAdDto("new title",205,"new description");
-    static final Ad updateAd = new Ad(0,user,205,createOrUpdateAdDto.getTitle(),"image",createOrUpdateAdDto.getDescription());
-    static final AdDto adDto = new AdDto(user.getId(),"picture",ad.getPk(),ad.getPrice(),ad.getTitle());
+    static final Ad updateAd = new Ad(0, USERS,205,createOrUpdateAdDto.getTitle(),"image",createOrUpdateAdDto.getDescription());
+    static final AdDto adDto = new AdDto(USERS.getId(),"picture",ad.getPk(),ad.getPrice(),ad.getTitle());
 
-    static final ExtendedAdDto extendedAdDto = new ExtendedAdDto(ad.getPk(),user.getFirstName(), user.getLastName()
-            ,ad.getDescription(), user.getEmail(),ad.getImage(), user.getPhone(),ad.getPrice(),ad.getTitle());
+    static final ExtendedAdDto extendedAdDto = new ExtendedAdDto(ad.getPk(), USERS.getFirstName(), USERS.getLastName()
+            ,ad.getDescription(), USERS.getEmail(),ad.getImage(), USERS.getPhone(),ad.getPrice(),ad.getTitle());
 
     @Test
     void mapToAdsDtoTest() {

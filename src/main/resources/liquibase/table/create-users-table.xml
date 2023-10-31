@@ -5,15 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="create-user-table.1" author="AChumichev">
+    <changeSet id="create-users-table.1" author="AChumichev">
 
         <preConditions>
             <not>
-                <tableExists tableName="user"/>
+                <tableExists tableName="users"/>
             </not>
         </preConditions>
 
-        <createTable tableName="user">
+        <createTable tableName="users">
             <column name="id" type="SERIAL" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
