@@ -8,4 +8,6 @@ import ru.skypro.homework.model.Users;
 public interface UsersRepository extends JpaRepository<Users, Integer> {
 
     Users findUsersById(int userId);
+
+    Users findByEmail(String email);
 }

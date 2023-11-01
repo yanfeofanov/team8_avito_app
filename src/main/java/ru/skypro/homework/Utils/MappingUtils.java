@@ -57,7 +57,6 @@ public class MappingUtils {
         users.setRole(register.getRole());
         users.setPhone(register.getPhone());
         //user.setEmail(register.getUsername());
-        users.setUsername(register.getUsername());
         users.setPassword(register.getPassword());
         return users;
     }

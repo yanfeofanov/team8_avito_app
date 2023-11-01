@@ -23,7 +23,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String image;
-    private String username;
     private String password;
     private String email;
     private String phone;
