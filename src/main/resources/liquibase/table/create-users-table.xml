@@ -25,9 +25,6 @@
             <column name="email" type="VARCHAR(100)"/>
             <column name="phone" type="VARCHAR(100)"/>
             <column name="image" type="VARCHAR(500)"/>
-            <column name="username" type="VARCHAR(32)">
-                <constraints nullable="false"/>
-            </column>
             <column name="password" type="VARCHAR(16)">
                 <constraints nullable="false"/>
             </column>

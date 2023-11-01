@@ -10,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
@@ -19,6 +22,7 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Collection;
 
 @Slf4j
@@ -76,9 +80,13 @@ public class AdsController {
             }
     )
 
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAd(@RequestPart @Valid AdDto properties, @RequestPart MultipartFile image) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdDto> addAd(@RequestPart @Valid CreateOrUpdateAdDto properties,
+                                       @RequestPart (required = false) MultipartFile image){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        return new ResponseEntity<>(adService.creatAd(properties,"picture",userEmail),HttpStatus.CREATED);
     }
 
     @Operation(
@@ -113,8 +121,8 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
+        return new ResponseEntity<>(adService.getExtendedAdDto(id),HttpStatus.OK);
     }
 
     @Operation(
@@ -156,7 +164,10 @@ public class AdsController {
     )
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ExtendedAdDto> removeAd(@PathVariable Long id) {
+    public ResponseEntity<Void> removeAd(@PathVariable int id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        adService.deletedAd(id,userEmail);
         return ResponseEntity.ok().build();
     }
 
@@ -201,9 +212,9 @@ public class AdsController {
     )
 
     @PatchMapping("{id}")
-    public ResponseEntity<ExtendedAdDto> updateAds(@PathVariable Long id,
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id,
                                                    @RequestBody @Valid CreateOrUpdateAdDto properties) {
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(adService.updateAd(id,properties),HttpStatus.OK);
     }
 
     @Operation(
@@ -230,8 +241,10 @@ public class AdsController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<ExtendedAdDto> getAdsMe() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> getAdsMe() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        return new ResponseEntity<>(adService.getAdsDtoMe(userEmail),HttpStatus.OK);
     }
 
     @Operation(

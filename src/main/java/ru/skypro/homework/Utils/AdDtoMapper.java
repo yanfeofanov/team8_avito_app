@@ -11,9 +11,9 @@ import ru.skypro.homework.model.Ad;
 import java.util.List;
 
 @Mapper
-public interface AdMapper {
+public interface AdDtoMapper {
 
-    AdMapper INSTANCE = Mappers.getMapper( AdMapper.class );
+    AdDtoMapper INSTANCE = Mappers.getMapper( AdDtoMapper.class );
 
     @Mapping(target = "author", source = "users.id")
     @Mapping(target = "image", source = "image")
@@ -29,25 +29,6 @@ public interface AdMapper {
     @Mapping(target = "title", source = "title")
     @Mapping(target = "description", ignore = true)
     Ad toAd(AdDto adDto);
-
-    @Mapping(target = "pk", source = "pk")
-    @Mapping(target = "authorFirstName", source = "users.firstName")
-    @Mapping(target = "authorLastName", source = "users.lastName")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "email", source = "users.email")
-    @Mapping(target = "image", source = "users.image")
-    @Mapping(target = "phone", source = "users.phone")
-    @Mapping(target = "price", source = "price")
-    @Mapping(target = "title", source = "title")
-    ExtendedAdDto adToExtendedDto(Ad ad);
-
-    @Mapping(target = "pk", ignore = true)
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "price", source = "price")
-    @Mapping(target = "title", source = "title")
-    @Mapping(target = "image", ignore = true)
-    AdDto creatDtoToAdDto(CreateOrUpdateAdDto createOrUpdateAdDto);
-
 
     @Mapping(target = "author", source = "users.id")
     @Mapping(target = "image", source = "image")
