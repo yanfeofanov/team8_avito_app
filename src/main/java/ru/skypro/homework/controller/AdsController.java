@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
@@ -22,8 +21,6 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.Collection;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -214,7 +211,9 @@ public class AdsController {
     @PatchMapping("{id}")
     public ResponseEntity<AdDto> updateAds(@PathVariable int id,
                                                    @RequestBody @Valid CreateOrUpdateAdDto properties) {
-        return new ResponseEntity<>(adService.updateAd(id,properties),HttpStatus.OK);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        return new ResponseEntity<>(adService.updateAd(id,properties,userEmail),HttpStatus.OK);
     }
 
     @Operation(
@@ -286,7 +285,7 @@ public class AdsController {
             }
     )
 
-    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "{id}/image")
     public ResponseEntity<ExtendedAdDto> updateImage(@PathVariable Long id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok().build();
     }
