@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.Utils.CreateOrUpdateAdDtoMapper;
 import ru.skypro.homework.Utils.ExtendedAdDtoMapper;
@@ -24,6 +23,11 @@ public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
 
+    /**
+     * Метод выводит AdsDto (кол-во объявлений и все объявления)
+     *
+     * @return AdsDto
+     */
     @Override
     public AdsDto getAllAds() {
         List<Ad> adList = adRepository.findAll();
@@ -33,6 +37,14 @@ public class AdServiceImpl implements AdService {
         return adsDto;
     }
 
+    /**
+     * Метод создает объявление
+     *
+     * @param createOrUpdateAdDto title,price,description
+     * @param image картинка объявления
+     * @param userEmail login пользователя
+     * @return AdDto
+     */
     @Override
     public AdDto creatAd(CreateOrUpdateAdDto createOrUpdateAdDto, String image, String userEmail) {
         Users users = usersRepository.findByEmail(userEmail);
@@ -44,6 +56,12 @@ public class AdServiceImpl implements AdService {
         return adDto;
     }
 
+    /**
+     * Метод выдает информацию по объявлению
+     *
+     * @param id id объявления
+     * @return ExtendedAdDto
+     */
     @Override
     public ExtendedAdDto getExtendedAdDto(int id) {
         Ad ad = adRepository.findByPk(id);
@@ -56,6 +74,14 @@ public class AdServiceImpl implements AdService {
 
     }
 
+    /**
+     * Метод обновляет объявление
+     *
+     * @param idPk id объявления
+     * @param createOrUpdateAdDto title,price,description
+     * @param userName login пользователя
+     * @return AdDto
+     */
     @Override
     public AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto,String userName) {
         Ad ad = adRepository.findByPk(idPk);
@@ -73,7 +99,12 @@ public class AdServiceImpl implements AdService {
         } else throw new AdForbiddenException(userName);
 
     }
-
+    /**
+     * Метод выводит AdsDto (кол-во объявлений и все объявления пользователя)
+     *
+     * @param userName login пользователя
+     * @return AdsDto
+     */
     @Override
     public AdsDto getAdsDtoMe(String userName) {
         Users users = usersRepository.findByEmail(userName);
@@ -84,6 +115,13 @@ public class AdServiceImpl implements AdService {
         return adsDto;
     }
 
+    /**
+     * Метод удаляет объявление(может удалять Admin или создатель объявления)
+     *
+     * @param idPk id объявления
+     * @param userName login пользователя
+     * @return void
+     */
     @Override
     public void deletedAd(int idPk, String userName){
         Ad ad = adRepository.findByPk(idPk);
