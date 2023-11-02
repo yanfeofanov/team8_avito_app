@@ -2,10 +2,13 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.Utils.CreateOrUpdateAdDtoMapper;
 import ru.skypro.homework.Utils.ExtendedAdDtoMapper;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.AdForbiddenException;
+import ru.skypro.homework.exception.AdNullPointerException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repository.AdRepository;
@@ -44,18 +47,30 @@ public class AdServiceImpl implements AdService {
     @Override
     public ExtendedAdDto getExtendedAdDto(int id) {
         Ad ad = adRepository.findByPk(id);
-        ExtendedAdDto extendedAdDto = ExtendedAdDtoMapper.INSTANCE.adToExtendedDto(ad);
-        return extendedAdDto;
+        try {
+            ExtendedAdDto extendedAdDto = ExtendedAdDtoMapper.INSTANCE.adToExtendedDto(ad);
+            return extendedAdDto;
+        } catch (NullPointerException e) {
+            throw new AdNullPointerException(id);
+        }
+
     }
 
     @Override
-    public AdDto updateAd( int idPk, CreateOrUpdateAdDto createOrUpdateAdDto) {
+    public AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto,String userName) {
         Ad ad = adRepository.findByPk(idPk);
-        ad.setTitle(createOrUpdateAdDto.getTitle());
-        ad.setPrice(createOrUpdateAdDto.getPrice());
-        ad.setDescription(createOrUpdateAdDto.getDescription());
-        adRepository.save(ad);
-        return AdDtoMapper.INSTANCE.toDto(ad);
+        Users users = usersRepository.findByEmail(userName);
+        if (users.getRole().equals(Role.ADMIN) || ad.getUsers().getId() == users.getId()) {
+            try {
+                ad.setTitle(createOrUpdateAdDto.getTitle());
+                ad.setPrice(createOrUpdateAdDto.getPrice());
+                ad.setDescription(createOrUpdateAdDto.getDescription());
+                adRepository.save(ad);
+                return AdDtoMapper.INSTANCE.toDto(ad);
+            } catch (NullPointerException e) {
+                throw new AdNullPointerException(idPk);
+            }
+        } else throw new AdForbiddenException(userName);
 
     }
 
@@ -70,11 +85,15 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deletedAd(int idPk, String userName) {
+    public void deletedAd(int idPk, String userName){
         Ad ad = adRepository.findByPk(idPk);
         Users users = usersRepository.findByEmail(userName);
-        if(users.getRole().equals(Role.ADMIN) || ad.getUsers().getId()==users.getId()){
-            adRepository.delete(ad);
-        }
+        if (users.getRole().equals(Role.ADMIN) || ad.getUsers().getId() == users.getId()) {
+            try {
+                adRepository.delete(ad);
+            } catch (NullPointerException e) {
+                throw new AdNullPointerException(idPk);
+            }
+        }else throw new AdForbiddenException(userName);
     }
 }

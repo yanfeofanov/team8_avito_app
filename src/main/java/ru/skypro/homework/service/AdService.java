@@ -16,7 +16,7 @@ public interface AdService {
 
     ExtendedAdDto getExtendedAdDto(int idPk);
 
-    AdDto updateAd( int idPk, CreateOrUpdateAdDto createOrUpdateAdDto);
+    AdDto updateAd( int idPk, CreateOrUpdateAdDto createOrUpdateAdDto,String userName);
 
     AdsDto getAdsDtoMe(String userName);
 
