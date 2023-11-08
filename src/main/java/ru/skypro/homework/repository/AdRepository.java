@@ -3,9 +3,9 @@ package ru.skypro.homework.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.Users;
 
-import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Integer> {
@@ -14,7 +14,7 @@ public interface AdRepository extends JpaRepository<Ad, Integer> {
 
     void deleteAdByPk(int adId);
 
-    Collection<Ad> findAllByUser(User user);
+    List<Ad> findAllByUsers(Users users);
 }
 
 

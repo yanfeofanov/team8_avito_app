@@ -17,7 +17,7 @@
             <column name="id" type="SERIAL" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="user_id" type="INT4">
+            <column name="users_id" type="INT4">
                 <constraints nullable="false"/>
             </column>
             <column name="ad_id" type="INT4">
