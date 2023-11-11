@@ -80,10 +80,10 @@ public class AdsController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDto> addAd(@RequestPart @Valid CreateOrUpdateAdDto properties,
-                                       @RequestPart (required = false) MultipartFile image){
+                                       @RequestPart(required = false) MultipartFile image) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return new ResponseEntity<>(adService.creatAd(properties,"picture",userEmail),HttpStatus.CREATED);
+        return new ResponseEntity<>(adService.creatAd(properties, "picture", userEmail), HttpStatus.CREATED);
     }
 
     @Operation(
@@ -118,8 +118,8 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
-        return new ResponseEntity<>(adService.getExtendedAdDto(id),HttpStatus.OK);
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id, Authentication authentication) {
+        return new ResponseEntity<>(adService.getExtendedAdDto(id), HttpStatus.OK);
     }
 
     @Operation(
@@ -164,7 +164,7 @@ public class AdsController {
     public ResponseEntity<Void> removeAd(@PathVariable int id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        adService.deletedAd(id,userEmail);
+        adService.deletedAd(id, userEmail);
         return ResponseEntity.ok().build();
     }
 
@@ -210,10 +210,10 @@ public class AdsController {
 
     @PatchMapping("{id}")
     public ResponseEntity<AdDto> updateAds(@PathVariable int id,
-                                                   @RequestBody @Valid CreateOrUpdateAdDto properties) {
+                                           @RequestBody @Valid CreateOrUpdateAdDto properties) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return new ResponseEntity<>(adService.updateAd(id,properties,userEmail),HttpStatus.OK);
+        return new ResponseEntity<>(adService.updateAd(id, properties, userEmail), HttpStatus.OK);
     }
 
     @Operation(
@@ -243,7 +243,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> getAdsMe() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return new ResponseEntity<>(adService.getAdsDtoMe(userEmail),HttpStatus.OK);
+        return new ResponseEntity<>(adService.getAdsDtoMe(userEmail), HttpStatus.OK);
     }
 
     @Operation(

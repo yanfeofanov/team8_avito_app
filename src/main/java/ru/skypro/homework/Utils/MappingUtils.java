@@ -1,10 +1,11 @@
 package ru.skypro.homework.Utils;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.Users;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -58,9 +59,9 @@ public class MappingUtils {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getPk());
         commentDto.setText(commentDto.getText());
-        commentDto.setAuthor(comment.getUsers().getId());
-        commentDto.setAuthorFirstName(comment.getUsers().getFirstName());
-        commentDto.setAuthorImage(comment.getUsers().getImage());
+        commentDto.setAuthor(comment.getUser().getId());
+        commentDto.setAuthorFirstName(comment.getUser().getFirstName());
+        commentDto.setAuthorImage(comment.getUser().getImage());
         return commentDto;
     }
 
@@ -75,7 +76,7 @@ public class MappingUtils {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setAd(ad);
-        comment.setUsers(users);
+        comment.setUser(users);
         comment.setCreatedAt(commentDto.getCreatedAt());
         return comment;
     }
@@ -92,14 +93,14 @@ public class MappingUtils {
         return userDto;
     }
 
-    public Users mapToUser(Register register) {
+    public Users mapToUser(Register register, PasswordEncoder passwordEncoder) {
         Users users = new Users();
         users.setFirstName(register.getFirstName());
         users.setLastName(register.getLastName());
         users.setRole(register.getRole());
         users.setPhone(register.getPhone());
-        //user.setEmail(register.getUsername());
-        users.setPassword(register.getPassword());
+        users.setEmail(register.getUsername());
+        users.setPassword(passwordEncoder.encode(register.getPassword()));
         return users;
     }
 

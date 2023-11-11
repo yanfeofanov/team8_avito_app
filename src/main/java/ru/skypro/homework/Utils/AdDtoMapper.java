@@ -15,14 +15,14 @@ public interface AdDtoMapper {
 
     AdDtoMapper INSTANCE = Mappers.getMapper( AdDtoMapper.class );
 
-    @Mapping(target = "author", source = "users.id")
+    @Mapping(target = "author", source = "user.id")
     @Mapping(target = "image", source = "image")
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "title", source = "title")
     AdDto toDto(Ad ad);
 
-    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "image", source = "image")
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "price", source = "price")
@@ -30,7 +30,7 @@ public interface AdDtoMapper {
     @Mapping(target = "description", ignore = true)
     Ad toAd(AdDto adDto);
 
-    @Mapping(target = "author", source = "users.id")
+    @Mapping(target = "author", source = "user.id")
     @Mapping(target = "image", source = "image")
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "price", source = "price")

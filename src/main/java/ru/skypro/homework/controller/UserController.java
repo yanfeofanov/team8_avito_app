@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -73,7 +74,7 @@ public class UserController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUserInfo() {
+    public ResponseEntity<UserDto> getUserInfo(Authentication authentication) {
         UserDto userDto = usersService.getUserInfo();
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
@@ -98,7 +99,7 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data) {
+    public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data, Authentication authentication) {
         UpdateUserDto updateUserDto = usersService.updateUserData(data);
         return ResponseEntity.status(HttpStatus.OK).body(updateUserDto);
     }

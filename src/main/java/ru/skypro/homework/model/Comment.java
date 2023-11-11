@@ -14,7 +14,7 @@ public class Comment {
     private int pk;
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private Users users;
+    private Users user;
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
