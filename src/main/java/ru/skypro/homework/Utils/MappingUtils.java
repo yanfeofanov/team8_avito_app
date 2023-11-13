@@ -7,6 +7,7 @@ import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Users;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,14 +16,14 @@ public class MappingUtils {
     public CommentDto mapToCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getPk());
-        commentDto.setText(commentDto.getText());
+        commentDto.setText(comment.getText());
         commentDto.setAuthor(comment.getUsers().getId());
         commentDto.setAuthorFirstName(comment.getUsers().getFirstName());
         commentDto.setAuthorImage(comment.getUsers().getImage());
         return commentDto;
     }
 
-    public CommentsDto mapToCommentsDto(Collection<Comment> comments) {
+    public CommentsDto mapToCommentsDto(List<Comment> comments) {
         CommentsDto commentsDto = new CommentsDto();
         commentsDto.setCount(comments.size());
         commentsDto.setResults(comments.stream().map(this::mapToCommentDto).collect(Collectors.toList()));
@@ -36,6 +37,16 @@ public class MappingUtils {
         comment.setUsers(users);
         comment.setCreatedAt(commentDto.getCreatedAt());
         return comment;
+    }
+
+    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto,Ad ad,Users user){
+        Comment comment = new Comment();
+        comment.setText(createOrUpdateCommentDto.getText());
+        comment.setAd(ad);
+        comment.setUsers(user);
+        comment.setCreatedAt(time);
+        return comment;
+
     }
 
     public UserDto mapToUserDto(Users users) {

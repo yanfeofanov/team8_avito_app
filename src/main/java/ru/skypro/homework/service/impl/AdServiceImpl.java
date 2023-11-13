@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.Utils.CreateOrUpdateAdDtoMapper;
 import ru.skypro.homework.Utils.ExtendedAdDtoMapper;
@@ -57,7 +56,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto,String userName) {
+    public AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto, String userName) {
         Ad ad = adRepository.findByPk(idPk);
         Users users = usersRepository.findByEmail(userName);
         if (users.getRole().equals(Role.ADMIN) || ad.getUsers().getId() == users.getId()) {
@@ -85,7 +84,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public void deletedAd(int idPk, String userName){
+    public void deletedAd(int idPk, String userName) {
         Ad ad = adRepository.findByPk(idPk);
         Users users = usersRepository.findByEmail(userName);
         if (users.getRole().equals(Role.ADMIN) || ad.getUsers().getId() == users.getId()) {
@@ -94,6 +93,10 @@ public class AdServiceImpl implements AdService {
             } catch (NullPointerException e) {
                 throw new AdNullPointerException(idPk);
             }
-        }else throw new AdForbiddenException(userName);
+        } else throw new AdForbiddenException(userName);
     }
+
+
+
+
 }
