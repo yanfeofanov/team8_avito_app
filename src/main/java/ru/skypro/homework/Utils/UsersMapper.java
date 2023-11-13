@@ -15,5 +15,6 @@ public interface UsersMapper {
     Users mapToUser(Register register);
 
     Users mapToUser(UpdateUserDto updateUserDto, @MappingTarget Users user);
-    UpdateUserDto mapToUpdate (Users user);
+
+    UpdateUserDto mapToUpdate(Users user);
 }

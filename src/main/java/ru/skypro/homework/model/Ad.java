@@ -19,7 +19,7 @@ public class Ad {
     private int pk;
     @ManyToOne
     @JoinColumn(name = "users_id")
-    private Users users;
+    private Users user;
     private int price;
     private String title;
     private String image;
