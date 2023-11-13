@@ -7,7 +7,6 @@ import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Users;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class MappingUtils {
         return comment;
     }
 
-    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto,Ad ad,Users user){
+    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, Users user) {
         Comment comment = new Comment();
         comment.setText(createOrUpdateCommentDto.getText());
         comment.setAd(ad);

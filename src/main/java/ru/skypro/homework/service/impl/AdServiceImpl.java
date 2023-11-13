@@ -70,7 +70,6 @@ public class AdServiceImpl implements AdService {
                 throw new AdNullPointerException(idPk);
             }
         } else throw new AdForbiddenException(userName);
-
     }
 
     @Override
@@ -96,8 +95,6 @@ public class AdServiceImpl implements AdService {
             }
         } else throw new AdForbiddenException(userName);
     }
-
-
 
 
 }

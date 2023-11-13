@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 import javax.validation.Valid;
@@ -31,15 +29,10 @@ import javax.validation.Valid;
 @Tag(name = "Comments controller", description = "контроллер для работы с комментариями к объявлениям")
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("comments")
+@RequestMapping("ads")
 public class CommentsController {
 
-
-   // private final CommentService commentService;
-
     private final CommentServiceImpl commentService;
-
-
 
     @Operation(
             summary = "Получение комментариев объявления",
@@ -66,7 +59,7 @@ public class CommentsController {
     )
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDto> getCommentsByAdId(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int id) {
-        return new ResponseEntity<>(commentService.read(id),HttpStatus.OK);
+        return new ResponseEntity<>(commentService.read(id), HttpStatus.OK);
     }
 
     @Operation(
@@ -95,11 +88,11 @@ public class CommentsController {
     @PostMapping("{id}/comments")
     public CommentDto addCommentByAdId(
             @PathVariable @Parameter(description = "уникальный идентификатор объявления") int id,
-                                       @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
-                                       @Valid CreateOrUpdateCommentDto createCommentDto) {
+            @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "текст комментария")
+            @Valid CreateOrUpdateCommentDto createCommentDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return commentService.addCommentById(id,createCommentDto,userEmail);
+        return commentService.addCommentById(id, createCommentDto, userEmail);
     }
 
     @Operation(
@@ -125,8 +118,10 @@ public class CommentsController {
     )
     @DeleteMapping("{adId}/comments/{commentId}")
     public ResponseEntity<Void> deleteAdCommentById(@PathVariable @Parameter(description = "уникальный идентификатор объявления") int adId,
-                                                       @PathVariable @Parameter(description = "уникальный идентификатор комментария") int commentId) {
-        commentService.deleteCommentById(adId,commentId);
+                                                    @PathVariable @Parameter(description = "уникальный идентификатор комментария") int commentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        commentService.deleteCommentById(adId, commentId, userEmail);
         return ResponseEntity.ok().build();
     }
 
@@ -164,6 +159,6 @@ public class CommentsController {
                                           @Valid CreateOrUpdateCommentDto updateCommentDto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return commentService.updateComments(adId,commentId,updateCommentDto,userEmail);
+        return commentService.updateComments(adId, commentId, updateCommentDto, userEmail);
     }
 }

@@ -9,9 +9,9 @@ import ru.skypro.homework.model.Comment;
 public interface CommentService {
     CommentsDto read(int idPk);
 
- //   CommentDto updateComments(int adId, int commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto);
+    CommentDto updateComments(int adId, int commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName);
 
-   // CommentDto addCommentById(int id, CreateOrUpdateCommentDto createOrUpdateCommentDto);
+    CommentDto addCommentById(int id, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName);
 
-   void deleteCommentById(int id, int commentId);
+    void deleteCommentById(int adId, int commentId, String userName);
 }
