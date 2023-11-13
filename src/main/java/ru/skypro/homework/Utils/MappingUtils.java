@@ -8,88 +8,57 @@ import ru.skypro.homework.model.Comment;
 import ru.skypro.homework.model.Users;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class MappingUtils {
 
-    public AdDto mapToAdDto(Ad ad) {
-        AdDto adDto = new AdDto();
-        adDto.setPk(ad.getPk());
-        adDto.setTitle(ad.getTitle());
-        adDto.setPrice(ad.getPrice());
-        adDto.setAuthor(adDto.getAuthor());
-        adDto.setImage(adDto.getImage());
-        return adDto;
-    }
-
-    public ExtendedAdDto mapToExtendedAdDto(Ad ad) {
-        ExtendedAdDto extendedAdDto = new ExtendedAdDto();
-        extendedAdDto.setPk(ad.getPk());
-        extendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
-        extendedAdDto.setAuthorLastName(ad.getUser().getLastName());
-        extendedAdDto.setDescription(ad.getDescription());
-        extendedAdDto.setImage(ad.getImage());
-        extendedAdDto.setEmail(ad.getUser().getEmail());
-        extendedAdDto.setPhone(ad.getUser().getPhone());
-        extendedAdDto.setTitle(ad.getTitle());
-        extendedAdDto.setPrice(ad.getPrice());
-        return extendedAdDto;
-    }
-
-    public AdsDto mapToAdsDto(Collection<Ad> ads) {
-        AdsDto adsDto = new AdsDto();
-        adsDto.setCount(ads.size());
-        adsDto.setResults(ads.stream().map(this::mapToAdDto).collect(Collectors.toList()));
-        return adsDto;
-    }
-
-    public Ad mapToAd(CreateOrUpdateAdDto createOrUpdateAdDto, Ad ad) {
-        ad.setDescription(createOrUpdateAdDto.getDescription());
-        ad.setPrice(createOrUpdateAdDto.getPrice());
-        ad.setTitle(createOrUpdateAdDto.getTitle());
-        return ad;
-    }
-
-    public Ad mapToAd(CreateOrUpdateAdDto createOrUpdateAdDto) {
-        return mapToAd(createOrUpdateAdDto, new Ad());
-    }
-
     public CommentDto mapToCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setPk(comment.getPk());
-        commentDto.setText(commentDto.getText());
+        commentDto.setText(comment.getText());
         commentDto.setAuthor(comment.getUser().getId());
         commentDto.setAuthorFirstName(comment.getUser().getFirstName());
         commentDto.setAuthorImage(comment.getUser().getImage());
         return commentDto;
     }
 
-    public CommentsDto mapToCommentsDto(Collection<Comment> comments) {
+    public CommentsDto mapToCommentsDto(List<Comment> comments) {
         CommentsDto commentsDto = new CommentsDto();
         commentsDto.setCount(comments.size());
         commentsDto.setResults(comments.stream().map(this::mapToCommentDto).collect(Collectors.toList()));
         return commentsDto;
     }
 
-    public Comment mapToComment(CommentDto commentDto, Ad ad, Users users) {
+    public Comment mapToComment(CommentDto commentDto, Ad ad, Users user) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setAd(ad);
-        comment.setUser(users);
+        comment.setUser(user);
         comment.setCreatedAt(commentDto.getCreatedAt());
         return comment;
     }
 
-    public UserDto mapToUserDto(Users users) {
+    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto,Ad ad,Users user){
+        Comment comment = new Comment();
+        comment.setText(createOrUpdateCommentDto.getText());
+        comment.setAd(ad);
+        comment.setUser(user);
+        comment.setCreatedAt(time);
+        return comment;
+
+    }
+
+    public UserDto mapToUserDto(Users user) {
         UserDto userDto = new UserDto();
-        userDto.setId(users.getId());
-        userDto.setEmail(users.getEmail());
-        userDto.setPhone(users.getPhone());
-        userDto.setImage(users.getImage());
-        userDto.setLastName(users.getLastName());
-        userDto.setFirstName(users.getFirstName());
-        userDto.setRole(users.getRole());
+        userDto.setId(user.getId());
+        userDto.setEmail(user.getEmail());
+        userDto.setPhone(user.getPhone());
+        userDto.setImage(user.getImage());
+        userDto.setLastName(user.getLastName());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setRole(user.getRole());
         return userDto;
     }
 
@@ -104,10 +73,10 @@ public class MappingUtils {
         return users;
     }
 
-    public Users mapToUser(UpdateUserDto updateUserDto, Users users) {
-        users.setFirstName(updateUserDto.getFirstName());
-        users.setLastName(updateUserDto.getLastName());
-        users.setPhone(updateUserDto.getPhone());
-        return users;
+    public Users mapToUser(UpdateUserDto updateUserDto, Users user) {
+        user.setFirstName(updateUserDto.getFirstName());
+        user.setLastName(updateUserDto.getLastName());
+        user.setPhone(updateUserDto.getPhone());
+        return user;
     }
 }

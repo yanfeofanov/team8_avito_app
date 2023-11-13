@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface AdDtoMapper {
 
-    AdDtoMapper INSTANCE = Mappers.getMapper( AdDtoMapper.class );
+    AdDtoMapper INSTANCE = Mappers.getMapper(AdDtoMapper.class);
 
     @Mapping(target = "author", source = "user.id")
     @Mapping(target = "image", source = "image")
@@ -35,5 +35,5 @@ public interface AdDtoMapper {
     @Mapping(target = "pk", source = "pk")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "title", source = "title")
-    List<AdDto> adToAdsDtoList(List<Ad>adList);
+    List<AdDto> adToAdsDtoList(List<Ad> adList);
 }
