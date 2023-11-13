@@ -76,8 +76,6 @@ public class AdsController {
                     )
             }
     )
-
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDto> addAd(@RequestPart @Valid CreateOrUpdateAdDto properties,
                                        @RequestPart(required = false) MultipartFile image) {
@@ -118,7 +116,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id, Authentication authentication) {
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
         return new ResponseEntity<>(adService.getExtendedAdDto(id), HttpStatus.OK);
     }
 
@@ -159,7 +157,6 @@ public class AdsController {
                     )
             }
     )
-
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeAd(@PathVariable int id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -207,7 +204,6 @@ public class AdsController {
                     )
             }
     )
-
     @PatchMapping("{id}")
     public ResponseEntity<AdDto> updateAds(@PathVariable int id,
                                            @RequestBody @Valid CreateOrUpdateAdDto properties) {
@@ -284,7 +280,6 @@ public class AdsController {
                     )
             }
     )
-
     @PatchMapping(value = "{id}/image")
     public ResponseEntity<ExtendedAdDto> updateImage(@PathVariable Long id, @RequestParam MultipartFile image) {
         return ResponseEntity.ok().build();

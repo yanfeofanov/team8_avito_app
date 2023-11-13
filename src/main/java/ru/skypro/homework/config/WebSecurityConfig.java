@@ -16,13 +16,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class WebSecurityConfig {
 
-  /*  private static final String[] AUTH_WHITELIST = {
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/webjars/**"
-    };*/
-
     @Bean
     public UserDetailsService userDetailsService(UsersRepository usersRepository) {
         return username -> {
@@ -33,25 +26,14 @@ public class WebSecurityConfig {
             throw new UsernameNotFoundException("User '" + username + "' не найден");
         };
     }
-    /*public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
-    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                //.antMatchers("/ads/**", "/users/**").access("hasRole('USER') || hasRole('ADMIN')")
-                //.antMatchers("/login", "/register", "/ads").permitAll()
-                .anyRequest().permitAll()
+                .antMatchers("/login", "/register", "/ads").permitAll()
+                .antMatchers("/ads/**", "/users/**").access("hasRole('USER') || hasRole('ADMIN')")
                 .and()
                 .cors()
                 .and()

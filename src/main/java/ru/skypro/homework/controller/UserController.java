@@ -74,7 +74,7 @@ public class UserController {
             }
     )
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUserInfo(Authentication authentication) {
+    public ResponseEntity<UserDto> getUserInfo() {
         UserDto userDto = usersService.getUserInfo();
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
@@ -99,7 +99,7 @@ public class UserController {
             }
     )
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data, Authentication authentication) {
+    public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data) {
         UpdateUserDto updateUserDto = usersService.updateUserData(data);
         return ResponseEntity.status(HttpStatus.OK).body(updateUserDto);
     }
