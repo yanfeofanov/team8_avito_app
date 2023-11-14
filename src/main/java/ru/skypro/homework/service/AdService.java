@@ -6,8 +6,6 @@ import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.model.Ad;
 
-import java.util.List;
-
 public interface AdService {
 
     AdsDto getAllAds();
@@ -16,9 +14,9 @@ public interface AdService {
 
     ExtendedAdDto getExtendedAdDto(int idPk);
 
-    AdDto updateAd( int idPk, CreateOrUpdateAdDto createOrUpdateAdDto,String userName);
+    AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto, String userName);
 
     AdsDto getAdsDtoMe(String userName);
 
-    void deletedAd(int idPk,String userName);
+    void deletedAd(int idPk, String userName);
 }

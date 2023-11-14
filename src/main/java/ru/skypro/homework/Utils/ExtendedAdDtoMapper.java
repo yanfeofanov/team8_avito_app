@@ -12,12 +12,12 @@ public interface ExtendedAdDtoMapper {
     ExtendedAdDtoMapper INSTANCE = Mappers.getMapper(ExtendedAdDtoMapper.class);
 
     @Mapping(target = "pk", source = "ad.pk")
-    @Mapping(target = "authorFirstName", source = "users.firstName")
-    @Mapping(target = "authorLastName", source = "users.lastName")
+    @Mapping(target = "authorFirstName", source = "user.firstName")
+    @Mapping(target = "authorLastName", source = "user.lastName")
     @Mapping(target = "description", source = "description")
-    @Mapping(target = "email", source = "users.email")
-    @Mapping(target = "image", source = "users.image")
-    @Mapping(target = "phone", source = "users.phone")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "image", source = "user.image")
+    @Mapping(target = "phone", source = "user.phone")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "title", source = "title")
     ExtendedAdDto adToExtendedDto(Ad ad);
