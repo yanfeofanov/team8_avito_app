@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserDetailsService userDetailsService;
 
     @Override
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+   //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public CommentsDto read(int id) {
         List<Comment> comment = commentRepository.findByAd_Pk(id);
         CommentsDto commentsDto = new CommentsDto();
@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public CommentDto addCommentById(int adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         Ad ad = adRepository.findByPk(adId);

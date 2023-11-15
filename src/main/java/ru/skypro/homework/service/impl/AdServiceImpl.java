@@ -37,7 +37,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     public AdDto creatAd(CreateOrUpdateAdDto createOrUpdateAdDto, String image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
         Ad ad = createOrUpdateAdDtoMapper.creatDtoToAd(createOrUpdateAdDto);
@@ -48,7 +48,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public ExtendedAdDto getExtendedAdDto(int id) {
         Ad ad = adRepository.findByPk(id);
         try {
@@ -77,7 +77,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public AdsDto getAdsDtoMe(String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         List<Ad> ads = adRepository.findAllByUser(user);
