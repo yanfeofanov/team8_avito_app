@@ -1,4 +1,4 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -13,21 +13,23 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exception.UserForbiddenException;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
+import ru.skypro.homework.service.UserService;
 
 @RequiredArgsConstructor
 @Service
-public class UsersService {
+public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
+    private final UsersMapper usersMapper;
 
     public boolean setPasswordForUser(NewPassword newPassword) {
         AvitoUser user = getAuthUser();
         if (user == null) {
             return false;
         } else if (encoder.matches(newPassword.getNewPassword(), newPassword.getCurrentPassword())) {
-            throw new UserForbiddenException("Пароли не должны совпадать");
+            throw new UserForbiddenException();
         } else {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
             usersRepository.save(user);
@@ -37,14 +39,14 @@ public class UsersService {
 
     public UserDto getUserInfo() {
         AvitoUser user = getAuthUser();
-        return UsersMapper.INSTANCE.mapToUserDto(user);
+        return usersMapper.mapToUserDto(user);
     }
 
     public UpdateUserDto updateUserData(UpdateUserDto updateUserDto) {
         AvitoUser user = getAuthUser();
-        UsersMapper.INSTANCE.mapToUser(updateUserDto, user);
+        usersMapper.mapToUser(updateUserDto, user);
         usersRepository.save(user);
-        return UsersMapper.INSTANCE.mapToUpdate(user);
+        return usersMapper.mapToUpdate(user);
     }
 
     private AvitoUser getAuthUser() {

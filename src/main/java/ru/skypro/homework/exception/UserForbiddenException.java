@@ -1,11 +1,13 @@
 package ru.skypro.homework.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.RequiredArgsConstructor;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
+
+@RequiredArgsConstructor
 public class UserForbiddenException extends RuntimeException {
-    public UserForbiddenException(String message) {
-        super(message);
+    @Override
+    public String getMessage() {
+        return "Пароли не должны совпадать";
     }
 }
+

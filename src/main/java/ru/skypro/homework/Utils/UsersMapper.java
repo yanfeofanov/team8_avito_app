@@ -6,9 +6,8 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.AvitoUser;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UsersMapper {
-    UsersMapper INSTANCE = Mappers.getMapper(UsersMapper.class);
 
     UserDto mapToUserDto(AvitoUser user);
 
