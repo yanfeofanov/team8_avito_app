@@ -7,7 +7,5 @@ import ru.skypro.homework.model.AvitoUser;
 @Repository
 public interface UsersRepository extends JpaRepository<AvitoUser, Integer> {
 
-    AvitoUser findUsersById(int userId);
-
     AvitoUser findByEmail(String email);
 }
