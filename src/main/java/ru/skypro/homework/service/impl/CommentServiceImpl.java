@@ -18,10 +18,8 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor
