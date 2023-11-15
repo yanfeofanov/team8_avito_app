@@ -11,7 +11,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.exception.UserForbiddenException;
-import ru.skypro.homework.model.Users;
+import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
 
 @RequiredArgsConstructor
@@ -23,10 +23,10 @@ public class UsersService {
     private final PasswordEncoder encoder;
 
     public boolean setPasswordForUser(NewPassword newPassword) {
-        Users user = getAuthUser();
+        AvitoUser user = getAuthUser();
         if (user == null) {
             return false;
-        } else if (encoder.matches(newPassword.getCurrentPassword(), newPassword.getNewPassword())) {
+        } else if (encoder.matches(newPassword.getNewPassword(), newPassword.getCurrentPassword())) {
             throw new UserForbiddenException("Пароли не должны совпадать");
         } else {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
@@ -36,20 +36,20 @@ public class UsersService {
     }
 
     public UserDto getUserInfo() {
-        Users user = getAuthUser();
+        AvitoUser user = getAuthUser();
         return UsersMapper.INSTANCE.mapToUserDto(user);
     }
 
     public UpdateUserDto updateUserData(UpdateUserDto updateUserDto) {
-        Users user = getAuthUser();
+        AvitoUser user = getAuthUser();
         UsersMapper.INSTANCE.mapToUser(updateUserDto, user);
         usersRepository.save(user);
         return UsersMapper.INSTANCE.mapToUpdate(user);
     }
 
-    private Users getAuthUser() {
+    private AvitoUser getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = auth.getName();
-        return (Users) userDetailsService.loadUserByUsername(currentUsername);
+        return (AvitoUser) userDetailsService.loadUserByUsername(currentUsername);
     }
 }
