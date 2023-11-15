@@ -8,10 +8,10 @@ import ru.skypro.homework.Utils.AdDtoMapper;
 import ru.skypro.homework.Utils.CreateOrUpdateAdDtoMapper;
 import ru.skypro.homework.Utils.ExtendedAdDtoMapper;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.exception.AdForbiddenException;
-import ru.skypro.homework.exception.AdNullPointerException;
+import ru.skypro.homework.exception.ForbiddenException;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Users;
+import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
@@ -23,6 +23,9 @@ public class AdServiceImpl implements AdService {
 
     private final UserDetailsService userDetailsService;
     private final AdRepository adRepository;
+    private final AdDtoMapper adDtoMapper;
+    private final ExtendedAdDtoMapper extendedAdDtoMapper;
+    private final CreateOrUpdateAdDtoMapper createOrUpdateAdDtoMapper;
 
     /**
      * Метод выводит AdsDto (кол-во объявлений и все объявления)
@@ -34,7 +37,7 @@ public class AdServiceImpl implements AdService {
         List<Ad> adList = adRepository.findAll();
         AdsDto adsDto = new AdsDto();
         adsDto.setCount(adList.size());
-        adsDto.setResults(AdDtoMapper.INSTANCE.adToAdsDtoList(adList));
+        adsDto.setResults(adDtoMapper.adToAdsDtoList(adList));
         return adsDto;
     }
 
@@ -47,14 +50,14 @@ public class AdServiceImpl implements AdService {
      * @return AdDto
      */
     @Override
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     public AdDto creatAd(CreateOrUpdateAdDto createOrUpdateAdDto, String image, String userEmail) {
-        Users user = (Users) userDetailsService.loadUserByUsername(userEmail);
-        Ad ad = CreateOrUpdateAdDtoMapper.INSTANCE.creatDtoToAd(createOrUpdateAdDto);
+        AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
+        Ad ad = createOrUpdateAdDtoMapper.creatDtoToAd(createOrUpdateAdDto);
         ad.setImage(image);
         ad.setUser(user);
         adRepository.save(ad);
-        return AdDtoMapper.INSTANCE.toDto(ad);
+        return adDtoMapper.toDto(ad);
     }
 
     /**
@@ -64,13 +67,13 @@ public class AdServiceImpl implements AdService {
      * @return ExtendedAdDto
      */
     @Override
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public ExtendedAdDto getExtendedAdDto(int id) {
         Ad ad = adRepository.findByPk(id);
         try {
-            return ExtendedAdDtoMapper.INSTANCE.adToExtendedDto(ad);
+            return extendedAdDtoMapper.adToExtendedDto(ad);
         } catch (NullPointerException e) {
-            throw new AdNullPointerException(id);
+            throw new AdNotFoundException(id);
         }
     }
 
@@ -84,19 +87,20 @@ public class AdServiceImpl implements AdService {
      */
     @Override
     public AdDto updateAd(int idPk, CreateOrUpdateAdDto createOrUpdateAdDto, String userName) {
+        AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         Ad ad = adRepository.findByPk(idPk);
-        Users user = (Users) userDetailsService.loadUserByUsername(userName);
+        if (ad == null) {
+            throw new AdNotFoundException(idPk);
+        }
         if (user.getRole().equals(Role.ADMIN) || ad.getUser().getId() == user.getId()) {
-            try {
-                ad.setTitle(createOrUpdateAdDto.getTitle());
-                ad.setPrice(createOrUpdateAdDto.getPrice());
-                ad.setDescription(createOrUpdateAdDto.getDescription());
-                adRepository.save(ad);
-                return AdDtoMapper.INSTANCE.toDto(ad);
-            } catch (NullPointerException e) {
-                throw new AdNullPointerException(idPk);
-            }
-        } else throw new AdForbiddenException(userName);
+            ad.setTitle(createOrUpdateAdDto.getTitle());
+            ad.setPrice(createOrUpdateAdDto.getPrice());
+            ad.setDescription(createOrUpdateAdDto.getDescription());
+            adRepository.save(ad);
+            return adDtoMapper.toDto(ad);
+        } else {
+            throw new ForbiddenException(userName);
+        }
     }
     /**
      * Метод выводит AdsDto (кол-во объявлений и все объявления пользователя)
@@ -105,13 +109,13 @@ public class AdServiceImpl implements AdService {
      * @return AdsDto
      */
     @Override
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public AdsDto getAdsDtoMe(String userName) {
-        Users user = (Users) userDetailsService.loadUserByUsername(userName);
+        AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         List<Ad> ads = adRepository.findAllByUser(user);
         AdsDto adsDto = new AdsDto();
         adsDto.setCount(ads.size());
-        adsDto.setResults(AdDtoMapper.INSTANCE.adToAdsDtoList(ads));
+        adsDto.setResults(adDtoMapper.adToAdsDtoList(ads));
         return adsDto;
     }
 
@@ -124,16 +128,15 @@ public class AdServiceImpl implements AdService {
      */
     @Override
     public void deletedAd(int idPk, String userName) {
+        AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         Ad ad = adRepository.findByPk(idPk);
-        Users user = (Users) userDetailsService.loadUserByUsername(userName);
+        if (ad == null) {
+            throw new AdNotFoundException(idPk);
+        }
         if (user.getRole().equals(Role.ADMIN) || ad.getUser().getId() == user.getId()) {
-            try {
-                adRepository.delete(ad);
-            } catch (NullPointerException e) {
-                throw new AdNullPointerException(idPk);
-            }
-        } else throw new AdForbiddenException(userName);
+            adRepository.delete(ad);
+        } else {
+            throw new ForbiddenException(userName);
+        }
     }
-
-
 }

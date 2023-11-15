@@ -17,7 +17,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @ToString
 @Table(name = "users")
-public class Users implements UserDetails {
+public class AvitoUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

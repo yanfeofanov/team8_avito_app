@@ -3,8 +3,6 @@ package ru.skypro.homework.service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Comment;
 
 public interface CommentService {
     CommentsDto read(int idPk);

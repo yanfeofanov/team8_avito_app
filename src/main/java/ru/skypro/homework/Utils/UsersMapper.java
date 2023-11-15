@@ -4,17 +4,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Users;
+import ru.skypro.homework.model.AvitoUser;
 
 @Mapper
 public interface UsersMapper {
     UsersMapper INSTANCE = Mappers.getMapper(UsersMapper.class);
 
-    UserDto mapToUserDto(Users user);
+    UserDto mapToUserDto(AvitoUser user);
 
-    Users mapToUser(Register register);
+    AvitoUser mapToUser(Register register);
 
-    Users mapToUser(UpdateUserDto updateUserDto, @MappingTarget Users user);
+    AvitoUser mapToUser(UpdateUserDto updateUserDto, @MappingTarget AvitoUser user);
 
-    UpdateUserDto mapToUpdate(Users user);
+    UpdateUserDto mapToUpdate(AvitoUser user);
 }
