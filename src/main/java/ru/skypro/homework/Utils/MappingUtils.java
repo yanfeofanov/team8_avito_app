@@ -4,8 +4,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.Users;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +30,7 @@ public class MappingUtils {
         return commentsDto;
     }
 
-    public Comment mapToComment(CommentDto commentDto, Ad ad, Users user) {
+    public Comment mapToComment(CommentDto commentDto, Ad ad, AvitoUser user) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setAd(ad);
@@ -39,7 +39,7 @@ public class MappingUtils {
         return comment;
     }
 
-    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, Users user) {
+    public Comment mapToComment(int time, CreateOrUpdateCommentDto createOrUpdateCommentDto, Ad ad, AvitoUser user) {
         Comment comment = new Comment();
         comment.setText(createOrUpdateCommentDto.getText());
         comment.setAd(ad);
@@ -49,7 +49,7 @@ public class MappingUtils {
 
     }
 
-    public UserDto mapToUserDto(Users user) {
+    public UserDto mapToUserDto(AvitoUser user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setEmail(user.getEmail());
@@ -61,8 +61,8 @@ public class MappingUtils {
         return userDto;
     }
 
-    public Users mapToUser(Register register, PasswordEncoder passwordEncoder) {
-        Users users = new Users();
+    public AvitoUser mapToUser(Register register, PasswordEncoder passwordEncoder) {
+        AvitoUser users = new AvitoUser();
         users.setFirstName(register.getFirstName());
         users.setLastName(register.getLastName());
         users.setRole(register.getRole());
@@ -72,7 +72,7 @@ public class MappingUtils {
         return users;
     }
 
-    public Users mapToUser(UpdateUserDto updateUserDto, Users user) {
+    public AvitoUser mapToUser(UpdateUserDto updateUserDto, AvitoUser user) {
         user.setFirstName(updateUserDto.getFirstName());
         user.setLastName(updateUserDto.getLastName());
         user.setPhone(updateUserDto.getPhone());

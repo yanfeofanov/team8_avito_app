@@ -46,11 +46,8 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setPasswordForUser(@RequestBody @Valid NewPassword newPassword) {
-        if (usersService.setPasswordForUser(newPassword)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        usersService.setPasswordForUser(newPassword);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(

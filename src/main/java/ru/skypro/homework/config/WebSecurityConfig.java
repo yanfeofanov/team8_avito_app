@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.model.Users;
+import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -19,7 +19,7 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UsersRepository usersRepository) {
         return username -> {
-            Users user = usersRepository.findByEmail(username);
+            AvitoUser user = usersRepository.findByEmail(username);
             if (user != null) {
                 return user;
             }

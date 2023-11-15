@@ -3,7 +3,7 @@ package ru.skypro.homework.exception;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AdNullPointerException extends RuntimeException{
+public class AdNotFoundException extends RuntimeException {
 
     private final int id;
 
