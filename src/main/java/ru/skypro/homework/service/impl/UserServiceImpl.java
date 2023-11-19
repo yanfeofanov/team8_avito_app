@@ -1,4 +1,4 @@
-package ru.skypro.homework.service;
+package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +13,10 @@ import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.exception.UserForbiddenException;
+import ru.skypro.homework.exception.UserUnauthorizedException;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
+import ru.skypro.homework.service.UserService;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +26,12 @@ import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
-public class UsersService {
+public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
+    private final UsersMapper usersMapper;
     @Value("${file.path.avatar}")
     private String filePath;
 
@@ -38,8 +40,8 @@ public class UsersService {
         AvitoUser user = getAuthUser();
         if (user == null) {
             return false;
-        } else if (encoder.matches(newPassword.getNewPassword(), newPassword.getCurrentPassword())) {
-            throw new UserForbiddenException("Пароли не должны совпадать");
+        } else if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+            throw new UserUnauthorizedException();
         } else {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
             usersRepository.save(user);
@@ -49,14 +51,14 @@ public class UsersService {
 
     public UserDto getUserInfo() {
         AvitoUser user = getAuthUser();
-        return UsersMapper.INSTANCE.mapToUserDto(user);
+        return usersMapper.mapToUserDto(user);
     }
 
     public UpdateUserDto updateUserData(UpdateUserDto updateUserDto) {
         AvitoUser user = getAuthUser();
-        UsersMapper.INSTANCE.mapToUser(updateUserDto, user);
+        usersMapper.mapToUser(updateUserDto, user);
         usersRepository.save(user);
-        return UsersMapper.INSTANCE.mapToUpdate(user);
+        return usersMapper.mapToUpdate(user);
     }
 
     private AvitoUser getAuthUser() {

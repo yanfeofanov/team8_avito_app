@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.UserService;
 
 import javax.imageio.IIOException;
 import javax.validation.Valid;
@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UsersService usersService;
+    private final UserService usersService;
 
     @Operation(
             summary = "Обновление пароля",
