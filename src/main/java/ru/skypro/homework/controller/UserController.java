@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
 
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UsersService usersService;
+    private final UserService usersService;
 
     @Operation(
             summary = "Обновление пароля",
