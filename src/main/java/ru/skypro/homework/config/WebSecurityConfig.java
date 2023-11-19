@@ -33,7 +33,11 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/login", "/register", "/ads","/ads/get/*","/users/get/*","/ads/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/login"
+                                                     , "/register"
+                                                     , "/ads"
+                                                     , "/ads/get/*"
+                                                     , "/users/get/*").permitAll()
                 .antMatchers("/ads/**", "/users/**").access("hasRole('USER') || hasRole('ADMIN')")
                 .and()
                 .cors()

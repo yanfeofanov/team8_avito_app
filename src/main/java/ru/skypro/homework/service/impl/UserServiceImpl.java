@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.webjars.NotFoundException;
 import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.UserUnauthorizedException;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService {
         return (AvitoUser) userDetailsService.loadUserByUsername(currentUsername);
     }
 
+    @Override
     @PreAuthorize("hasRole('USER')")
     public void uploadImageUsers(MultipartFile image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
@@ -98,13 +101,13 @@ public class UserServiceImpl implements UserService {
         return filePath;
     }
 
+    @Override
     public byte[] getUserImage(String filename) {
-        byte[] avatar = new byte[0];
         try {
-            avatar = Files.readAllBytes(Paths.get(System.getProperty("user.dir") +"/"+getFilePath()+ "/" +filename));
+            byte[] avatar = Files.readAllBytes(Paths.get(System.getProperty("user.dir") +"/"+getFilePath()+ "/" +filename));
+            return avatar;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return avatar;
     }
 }

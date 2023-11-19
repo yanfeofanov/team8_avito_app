@@ -14,7 +14,7 @@ public class AvitoExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    @ExceptionHandler({ForbiddenException.class, UserUnauthorizedException.class})
+    @ExceptionHandler({ForbiddenException.class})
     public ResponseEntity<?> handleForbidden(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
