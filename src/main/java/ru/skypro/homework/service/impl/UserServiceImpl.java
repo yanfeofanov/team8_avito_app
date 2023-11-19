@@ -10,7 +10,7 @@ import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.exception.UserForbiddenException;
+import ru.skypro.homework.exception.UserUnauthorizedException;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.UserService;
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
         AvitoUser user = getAuthUser();
         if (user == null) {
             return false;
-        } else if (encoder.matches(newPassword.getNewPassword(), newPassword.getCurrentPassword())) {
-            throw new UserForbiddenException();
+        } else if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+            throw new UserUnauthorizedException();
         } else {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
             usersRepository.save(user);
