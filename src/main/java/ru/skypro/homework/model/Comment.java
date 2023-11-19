@@ -1,11 +1,15 @@
 package ru.skypro.homework.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Table(name = "comment")
 public class Comment {
     @Id
@@ -13,12 +17,13 @@ public class Comment {
     @Column(name = "id")
     private int pk;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private AvitoUser user;
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
     private String text;
     @Column(name = "date_time")
     private long createdAt;
+
 }

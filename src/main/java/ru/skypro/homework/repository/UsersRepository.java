@@ -2,10 +2,10 @@ package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.AvitoUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UsersRepository extends JpaRepository<AvitoUser, Integer> {
 
-    User findUserById(int userId);
+    AvitoUser findByEmail(String email);
 }

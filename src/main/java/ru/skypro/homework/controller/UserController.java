@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.service.UsersService;
 
 import javax.validation.Valid;
 
@@ -20,7 +23,10 @@ import javax.validation.Valid;
 @RestController
 @Tag(name = "User controller", description = "контроллер для работы c пользователями")
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UsersService usersService;
+
     @Operation(
             summary = "Обновление пароля",
             responses = {
@@ -40,6 +46,7 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setPasswordForUser(@RequestBody @Valid NewPassword newPassword) {
+        usersService.setPasswordForUser(newPassword);
         return ResponseEntity.ok().build();
     }
 
@@ -64,7 +71,8 @@ public class UserController {
     )
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {
-        return ResponseEntity.ok().build();
+        UserDto userDto = usersService.getUserInfo();
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
     @Operation(
@@ -88,7 +96,8 @@ public class UserController {
     )
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDto> updateUserInfo(@RequestBody @Valid UpdateUserDto data) {
-        return ResponseEntity.ok().build();
+        UpdateUserDto updateUserDto = usersService.updateUserData(data);
+        return ResponseEntity.status(HttpStatus.OK).body(updateUserDto);
     }
 
     @Operation(
@@ -106,7 +115,7 @@ public class UserController {
             }
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile avatar) {
+    public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
