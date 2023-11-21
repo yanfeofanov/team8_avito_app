@@ -23,6 +23,4 @@ public interface AdService {
     void uploadImage(int id, MultipartFile image, String userEmail);
 
     byte[] getAdImage(String filename);
-
-    String getFilePath();
 }

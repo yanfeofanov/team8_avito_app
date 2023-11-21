@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 import ru.skypro.homework.Utils.UsersMapper;
@@ -70,14 +71,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     public void uploadImageUsers(MultipartFile image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
         String dir = System.getProperty("user.dir") + "/" + filePath;
         try {
             Files.createDirectories(Path.of(dir));
             String fileName = String.format("avatar%s.%s", user.getEmail()
-                                                           , getExtension(image.getOriginalFilename()));
+                                                           , StringUtils.getFilenameExtension(image.getOriginalFilename()));
             image.transferTo(new File(dir + "/" + fileName));
             user.setImage("/users/get/" + fileName);
         } catch (IOException e) {

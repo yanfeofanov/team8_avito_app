@@ -2,9 +2,9 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 import ru.skypro.homework.Utils.AdDtoMapper;
@@ -16,7 +16,6 @@ import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.CommentService;
 
@@ -27,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -68,13 +68,12 @@ public class AdServiceImpl implements AdService {
     public AdDto creatAd(CreateOrUpdateAdDto createOrUpdateAdDto, MultipartFile image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
         Ad ad = createOrUpdateAdDtoMapper.creatDtoToAd(createOrUpdateAdDto);
-        ad.setImage(getUrlImage(ad.getPk(), image, userEmail));
+        String imageName = uploadImageOnSystem(image,userEmail);
+        ad.setImage(getUrlImage(imageName));
         ad.setUser(user);
         adRepository.save(ad);
         return adDtoMapper.toDto(ad);
     }
-
-
 
     /**
      * Метод выдает информацию по объявлению
@@ -152,6 +151,11 @@ public class AdServiceImpl implements AdService {
             throw new AdNotFoundException(idPk);
         }
         if (user.getRole().equals(Role.ADMIN) || ad.getUser().getId() == user.getId()) {
+            try {
+                Files.delete(Path.of(System.getProperty("user.dir") + "/" + filePath + ad.getImage().replaceAll("/ads/get","")));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             commentService.deleteAllCommentByPk(idPk);
             adRepository.delete(ad);
         } else {
@@ -160,11 +164,17 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     public void uploadImage(int id, MultipartFile image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
         Ad ad = adRepository.findByPk(id);
-        ad.setImage(getUrlImage(id, image, userEmail));
+        try {
+            Files.delete(Path.of(System.getProperty("user.dir") + "/" + filePath + ad.getImage().replaceAll("/ads/get","")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String imageName = uploadImageOnSystem(image,userEmail);
+        ad.setImage(getUrlImage(imageName));
         ad.setUser(user);
         adRepository.save(ad);
     }
@@ -175,16 +185,7 @@ public class AdServiceImpl implements AdService {
      * @return String
      */
     private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
-    /**
-     * Метод имя папки файла
-     * @return String
-     */
-    @Override
-    public String getFilePath() {
-        return filePath;
+        return StringUtils.getFilenameExtension(fileName);
     }
 
     /**
@@ -194,34 +195,50 @@ public class AdServiceImpl implements AdService {
      * @param userName login пользователя
      * @return String
      */
-    private String getFileName( int idPk, String userName, MultipartFile image) {
-        return String.format("image_%d_%s.%s", idPk,  userName, getExtension(image.getOriginalFilename()));
+    private String getFileName(String userName, MultipartFile image) {
+        return String.format("image%s_%s.%s",userName, UUID.randomUUID(), getExtension(image.getOriginalFilename()));
     }
 
     /**
      * Метод создает Url файла
      *
-     * @param image картинка объявления
-     * @param userEmail login пользователя
+     * @param fileName название картинки объявления
      * @return String
      */
-    private String getUrlImage(int idPk, MultipartFile image, String userEmail) {
-        AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
+    private String getUrlImage(String fileName) {
+        return "/ads/get/" + fileName;
+    }
+
+    /**
+     * Метод загружаем файл
+     *
+     * @param image файл
+     * @param userEmail имя пользователя
+     * @return String имя загруженного файла
+     */
+    private String uploadImageOnSystem(MultipartFile image, String userEmail) {
         String dir = System.getProperty("user.dir") + "/" + filePath;
+        String imageName = getFileName(userEmail,image);
         try {
             Files.createDirectories(Path.of(dir));
-            String fileName = getFileName(idPk, user.getEmail(), image);
-            image.transferTo(new File(dir + "/" + fileName));
-            return "/ads/get/" + fileName;
+            image.transferTo(new File(dir + "/" + imageName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return imageName;
     }
+
+    /**
+     * Метод получчает массив байтов
+     *
+     * @param filename имя картинки
+     * @return byte[]
+     */
 
     @Override
     public byte[] getAdImage(String filename) {
         try {
-            byte[] image = Files.readAllBytes(Paths.get(System.getProperty("user.dir") +"/"+getFilePath()+ "/" +filename));
+            byte[] image = Files.readAllBytes(Paths.get(System.getProperty("user.dir") +"/"+ filePath + "/" +filename));
             return image;
         } catch (IOException e) {
             throw new RuntimeException(e);

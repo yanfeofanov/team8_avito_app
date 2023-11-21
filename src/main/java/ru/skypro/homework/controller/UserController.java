@@ -16,11 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.UserService;
 
-import javax.imageio.IIOException;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * класс содержит эндпойнты для работы с пользователеми и их данными
