@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                         , "/ads"
                         , "/ads/get/*"
                         , "/users/get/*").permitAll()
-                .antMatchers("/ads/**", "/users/**").access("hasRole('USER') || hasRole('ADMIN')")
+                .antMatchers("/ads/**", "/users/**").authenticated()
                 .and()
                 .cors()
                 .and()
