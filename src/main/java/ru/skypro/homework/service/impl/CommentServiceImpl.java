@@ -31,6 +31,12 @@ public class CommentServiceImpl implements CommentService {
     private final CommentDtoMapper commentDtoMapper;
     private final UserDetailsService userDetailsService;
 
+
+    /**
+     * Метод получения комментария по ID
+     * @param id
+     * @return commentsDto
+     */
     @Override
    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public CommentsDto read(int id) {
@@ -40,6 +46,15 @@ public class CommentServiceImpl implements CommentService {
         commentsDto.setResults(commentDtoMapper.findCommentsToDto(comment));
         return commentsDto;
     }
+
+    /**
+     * Метод редактирования комментария по ID объявления
+     * @param adId
+     * @param commentId
+     * @param createOrUpdateCommentDto
+     * @param userName
+     * @return toDto
+     */
 
     public CommentDto updateComments(int adId, int commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
@@ -56,6 +71,12 @@ public class CommentServiceImpl implements CommentService {
         return commentDtoMapper.toDto(comment);
     }
 
+    /**
+     * Метод удаления конкретного комментария юзера по ID объявления
+     * @param adId
+     * @param commentId
+     * @param userName
+     */
     @Override
     public void deleteCommentById(int adId, int commentId, String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
@@ -70,12 +91,24 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    /**
+     * Метод удаления всех комментариев по ID объявления
+     * @param adId
+     */
+
     public void deleteAllCommentByPk(int adId) {
         List<Comment> allCommentByPk = commentRepository.findByAd_Pk(adId);
         commentRepository.deleteAll(allCommentByPk);
     }
 
-    //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+
+    /**
+     * Метод добавления комментария по его ID
+     * @param adId
+     * @param createOrUpdateCommentDto
+     * @param userName
+     * @return mapToCommentDto
+     */
     public CommentDto addCommentById(int adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);
         Ad ad = adRepository.findByPk(adId);
@@ -91,7 +124,7 @@ public class CommentServiceImpl implements CommentService {
                         .toInstant(ZoneOffset.UTC)
                         .toEpochMilli());
         commentRepository.save(comment);
-        return mappingUtils.mapToCommentDto(comment);
+        return commentDtoMapper.toDto(comment);
     }
 }
 

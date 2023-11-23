@@ -25,12 +25,23 @@ public class AuthServiceImpl implements AuthService {
         this.usersRepository = usersRepository;
     }
 
+    /**
+     * Метод логирования пользотваеля
+     * @param userName
+     * @param password
+     * @return boolean
+     */
     @Override
     public boolean login(String userName, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * Метод регистрации пользователя занесение данных в репозиторий
+     * @param register
+     * @return boolean
+     */
     @Override
     public boolean register(Register register) {
         usersRepository.save(mappingUtils.mapToUser(register, encoder));
