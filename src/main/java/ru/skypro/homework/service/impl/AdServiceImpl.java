@@ -163,6 +163,12 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    /**
+     * Метод обновления картинки по объявлению
+     * @param id
+     * @param image
+     * @param userEmail
+     */
     @Override
     //@PreAuthorize("hasRole('USER')")
     public void uploadImage(int id, MultipartFile image, String userEmail) {

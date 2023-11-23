@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService {
     private String filePath;
 
 
+    /**
+     * Метод изменения пароля пользователя
+     * @param newPassword
+     * @return boolean
+     */
     public boolean setPasswordForUser(NewPassword newPassword) {
         AvitoUser user = getAuthUser();
         if (user == null) {
@@ -52,10 +57,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Метод получения информации о пользователе
+     * @return UserDto
+     */
+
     public UserDto getUserInfo() {
         AvitoUser user = getAuthUser();
         return usersMapper.mapToUserDto(user);
     }
+
+    /**
+     * Метод обновления информации о пользователе
+     * @param updateUserDto
+     * @return updateUserDto
+     */
 
     public UpdateUserDto updateUserData(UpdateUserDto updateUserDto) {
         AvitoUser user = getAuthUser();
@@ -69,6 +85,12 @@ public class UserServiceImpl implements UserService {
         String currentUsername = auth.getName();
         return (AvitoUser) userDetailsService.loadUserByUsername(currentUsername);
     }
+
+    /**
+     * Метод обновления аватрки пользователя
+     * @param image
+     * @param userEmail
+     */
 
     @Override
     //@PreAuthorize("hasRole('USER')")

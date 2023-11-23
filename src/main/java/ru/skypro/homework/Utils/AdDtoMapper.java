@@ -13,10 +13,6 @@ public interface AdDtoMapper {
     @Mapping(target = "author", source = "user.id")
     AdDto toDto(Ad ad);
 
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "description", ignore = true)
-    Ad toAd(AdDto adDto);
-
     @Mapping(target = "author", source = "user.id")
     List<AdDto> adToAdsDtoList(List<Ad> adList);
 }

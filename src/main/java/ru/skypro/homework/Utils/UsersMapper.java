@@ -11,9 +11,10 @@ public interface UsersMapper {
 
     UserDto mapToUserDto(AvitoUser user);
 
-    AvitoUser mapToUser(Register register);
 
     AvitoUser mapToUser(UpdateUserDto updateUserDto, @MappingTarget AvitoUser user);
 
     UpdateUserDto mapToUpdate(AvitoUser user);
+
+
 }
