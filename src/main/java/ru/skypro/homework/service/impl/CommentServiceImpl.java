@@ -70,6 +70,11 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    public void deleteAllCommentByPk(int adId) {
+        List<Comment> allCommentByPk = commentRepository.findByAd_Pk(adId);
+        commentRepository.deleteAll(allCommentByPk);
+    }
+
     //@PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public CommentDto addCommentById(int adId, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userName);

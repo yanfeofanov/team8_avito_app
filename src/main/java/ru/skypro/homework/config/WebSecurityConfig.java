@@ -2,6 +2,7 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,8 +33,12 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/ads").permitAll()
-                .antMatchers("/ads/**", "/users/**").access("hasRole('USER') || hasRole('ADMIN')")
+                .antMatchers("/login"
+                        , "/register"
+                        , "/ads"
+                        , "/ads/get/*"
+                        , "/users/get/*").permitAll()
+                .antMatchers("/ads/**", "/users/**").authenticated()
                 .and()
                 .cors()
                 .and()

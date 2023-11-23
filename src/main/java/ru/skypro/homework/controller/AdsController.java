@@ -21,6 +21,9 @@ import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -81,8 +84,9 @@ public class AdsController {
                                        @RequestPart(required = false) MultipartFile image) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        return new ResponseEntity<>(adService.creatAd(properties, "picture", userEmail), HttpStatus.CREATED);
+        return new ResponseEntity<>(adService.creatAd(properties, image, userEmail), HttpStatus.CREATED);
     }
+
 
     @Operation(
             summary = "Получение информации об объявлении",
@@ -280,8 +284,19 @@ public class AdsController {
                     )
             }
     )
-    @PatchMapping(value = "{id}/image")
-    public ResponseEntity<ExtendedAdDto> updateImage(@PathVariable Long id, @RequestParam MultipartFile image) {
+    @PatchMapping(value = "{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateImage(@PathVariable int id, @RequestParam MultipartFile  image) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        adService.uploadImage(id,image,userEmail);
         return ResponseEntity.ok().build();
     }
+
+
+    @GetMapping(value = "/get/{filename}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public ResponseEntity<byte[]> serveFile(@PathVariable String filename){
+        return ResponseEntity.ok().body(adService.getAdImage(filename));
+    }
+
 }
+
