@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.Utils.CommentDtoMapper;
+import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.AuthService;
@@ -17,14 +18,14 @@ public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
-    private final CommentDtoMapper commentDtoMapper;
+    private final UsersMapper usersMapper;
     private final UsersRepository usersRepository;
 
     public AuthServiceImpl(UserDetailsService userDetailsService,
-                           PasswordEncoder passwordEncoder, CommentDtoMapper commentDtoMapper, UsersRepository usersRepository) {
+                           PasswordEncoder passwordEncoder, UsersMapper usersMapper, UsersRepository usersRepository) {
         this.userDetailsService = userDetailsService;
         this.encoder = passwordEncoder;
-        this.commentDtoMapper = commentDtoMapper;
+        this.usersMapper = usersMapper;
         this.usersRepository = usersRepository;
     }
 
@@ -50,8 +51,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean register(Register register) {
-        register.setPassword(encoder.encode(register.getPassword()));
-        usersRepository.save(commentDtoMapper.toAvitoUser(register));
+        usersRepository.save(usersMapper.mapToRegister(register, encoder));
         logger.info("успешная регистрация нового пользователя " + register.getUsername(), register);
         return true;
     }

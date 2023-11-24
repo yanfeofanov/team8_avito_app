@@ -19,6 +19,4 @@ public interface CommentDtoMapper {
 
     List<CommentDto> findCommentsToDto(List<Comment> listComment);
 
-    @Mapping(target = "email", source = "username")
-    AvitoUser toAvitoUser(Register register);
 }
