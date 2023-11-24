@@ -1,8 +1,10 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,12 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.webjars.NotFoundException;
 import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.UserUnauthorizedException;
 import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.repository.UsersRepository;
@@ -31,17 +31,20 @@ import java.nio.file.Paths;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
     private final UsersRepository usersRepository;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
     private final UsersMapper usersMapper;
+    @Getter
     @Value("${file.path.avatar}")
     private String filePath;
 
 
     /**
      * Метод изменения пароля пользователя
-     * @param newPassword
+     *
+     * @param newPassword новый пароль
      * @return boolean
      */
     public boolean setPasswordForUser(NewPassword newPassword) {
@@ -49,16 +52,19 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         } else if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+            logger.warn("введенный пароль пользователя " + user.getUsername() + " не совпадает с паролем в БД", user);
             throw new UserUnauthorizedException();
         } else {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
             usersRepository.save(user);
+            logger.info("пароль пользователя " + user.getUsername() + " успешно изменен", user);
             return true;
         }
     }
 
     /**
      * Метод получения информации о пользователе
+     *
      * @return UserDto
      */
 
@@ -69,7 +75,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Метод обновления информации о пользователе
-     * @param updateUserDto
+     *
+     * @param updateUserDto сущность для обновления информации пользователя
      * @return updateUserDto
      */
 
@@ -77,6 +84,7 @@ public class UserServiceImpl implements UserService {
         AvitoUser user = getAuthUser();
         usersMapper.mapToUser(updateUserDto, user);
         usersRepository.save(user);
+        logger.info("данные пользователя " + user.getUsername() + " успешно обновлены", user);
         return usersMapper.mapToUpdate(user);
     }
 
@@ -88,48 +96,36 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Метод обновления аватрки пользователя
-     * @param image
-     * @param userEmail
+     *
+     * @param image файл изображения для аватарки
+     * @param userEmail никнейм пользователя
      */
 
     @Override
-    //@PreAuthorize("hasRole('USER')")
     public void uploadImageUsers(MultipartFile image, String userEmail) {
         AvitoUser user = (AvitoUser) userDetailsService.loadUserByUsername(userEmail);
         String dir = System.getProperty("user.dir") + "/" + filePath;
         try {
             Files.createDirectories(Path.of(dir));
             String fileName = String.format("avatar%s.%s", user.getEmail()
-                                                           , StringUtils.getFilenameExtension(image.getOriginalFilename()));
+                    , StringUtils.getFilenameExtension(image.getOriginalFilename()));
             image.transferTo(new File(dir + "/" + fileName));
             user.setImage("/users/get/" + fileName);
+            logger.info("изображение " + fileName + " для аватара пользователя, сохранено на сервере", image);
         } catch (IOException e) {
+            logger.error("произошла ошибка при попытке сохранить изображение " + image.getOriginalFilename() + ", для аватара пользователя " + userEmail + ", на сервер", image);
             throw new RuntimeException(e);
         }
         usersRepository.save(user);
-    }
-    /**
-     * Метод указывает расширение файла
-     * @return String
-     */
-    private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
 
-    /**
-     * Метод имя папки файла
-     * @return String
-     */
-    public String getFilePath() {
-        return filePath;
     }
 
     @Override
     public byte[] getUserImage(String filename) {
         try {
-            byte[] avatar = Files.readAllBytes(Paths.get(System.getProperty("user.dir") +"/"+getFilePath()+ "/" +filename));
-            return avatar;
+            return Files.readAllBytes(Paths.get(System.getProperty("user.dir") + "/" + getFilePath() + "/" + filename));
         } catch (IOException e) {
+            logger.error("произошла ошибка при попытке прочитать изображение для аватара пользователя " + filename);
             throw new RuntimeException(e);
         }
     }
