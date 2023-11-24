@@ -3,6 +3,8 @@ package ru.skypro.homework.Utils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.model.AvitoUser;
 import ru.skypro.homework.model.Comment;
 
 import java.util.List;
@@ -14,6 +16,9 @@ public interface CommentDtoMapper {
     @Mapping(target = "authorImage", source = "user.image")
     @Mapping(target = "authorFirstName", source = "user.firstName")
     CommentDto toDto(Comment comment);
+
     List<CommentDto> findCommentsToDto(List<Comment> listComment);
 
+    @Mapping(target = "email", source = "username")
+    AvitoUser toAvitoUser(Register register);
 }

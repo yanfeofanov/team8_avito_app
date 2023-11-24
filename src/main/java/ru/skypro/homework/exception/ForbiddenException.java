@@ -3,7 +3,7 @@ package ru.skypro.homework.exception;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ForbiddenException extends RuntimeException{
+public class ForbiddenException extends RuntimeException {
     private final String name;
 
     @Override

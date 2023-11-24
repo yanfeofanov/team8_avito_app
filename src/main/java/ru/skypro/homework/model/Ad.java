@@ -25,7 +25,6 @@ public class Ad {
     private String image;
     private String description;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

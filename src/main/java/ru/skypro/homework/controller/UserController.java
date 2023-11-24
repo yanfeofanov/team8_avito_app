@@ -120,12 +120,12 @@ public class UserController {
     public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile image) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
-        usersService.uploadImageUsers(image,userEmail);
+        usersService.uploadImageUsers(image, userEmail);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/get/{filename}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-    public ResponseEntity<byte[]> serveFile(@PathVariable String filename){
+    public ResponseEntity<byte[]> serveFile(@PathVariable String filename) {
         return ResponseEntity.ok().body(usersService.getUserImage(filename));
     }
 
