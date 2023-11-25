@@ -9,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
 
@@ -25,7 +27,7 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UsersService usersService;
+    private final UserService usersService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -116,7 +118,15 @@ public class UserController {
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAvatar(@RequestPart MultipartFile image) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        usersService.uploadImageUsers(image, userEmail);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/get/{filename}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public ResponseEntity<byte[]> serveFile(@PathVariable String filename) {
+        return ResponseEntity.ok().body(usersService.getUserImage(filename));
     }
 
 }

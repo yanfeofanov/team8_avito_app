@@ -12,4 +12,6 @@ public interface CommentService {
     CommentDto addCommentById(int id, CreateOrUpdateCommentDto createOrUpdateCommentDto, String userName);
 
     void deleteCommentById(int adId, int commentId, String userName);
+
+    void deleteAllCommentByPk(int adId);
 }

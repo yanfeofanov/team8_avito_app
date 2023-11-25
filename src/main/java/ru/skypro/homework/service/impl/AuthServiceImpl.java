@@ -1,10 +1,13 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.Utils.MappingUtils;
+import ru.skypro.homework.Utils.CommentDtoMapper;
+import ru.skypro.homework.Utils.UsersMapper;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.repository.UsersRepository;
 import ru.skypro.homework.service.AuthService;
@@ -12,28 +15,44 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
-    private final MappingUtils mappingUtils;
+    private final UsersMapper usersMapper;
     private final UsersRepository usersRepository;
 
     public AuthServiceImpl(UserDetailsService userDetailsService,
-                           PasswordEncoder passwordEncoder, MappingUtils mappingUtils, UsersRepository usersRepository) {
+                           PasswordEncoder passwordEncoder, UsersMapper usersMapper, UsersRepository usersRepository) {
         this.userDetailsService = userDetailsService;
         this.encoder = passwordEncoder;
-        this.mappingUtils = mappingUtils;
+        this.usersMapper = usersMapper;
         this.usersRepository = usersRepository;
     }
 
+    /**
+     * Метод логирования пользотваеля
+     *
+     * @param userName никнейм пользователя
+     * @param password пароль
+     * @return boolean
+     */
     @Override
     public boolean login(String userName, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        logger.info("успешная аутентификация пользователя " + userName, userDetails);
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * Метод регистрации пользователя занесение данных в репозиторий
+     *
+     * @param register сущность для регистрации нового пользователя
+     * @return boolean
+     */
     @Override
     public boolean register(Register register) {
-        usersRepository.save(mappingUtils.mapToUser(register, encoder));
+        usersRepository.save(usersMapper.mapToRegister(register, encoder));
+        logger.info("успешная регистрация нового пользователя " + register.getUsername(), register);
         return true;
     }
 }

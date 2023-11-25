@@ -10,6 +10,10 @@ import javax.validation.constraints.Size;
 @Data
 @Schema(description = "регистрация пользователя")
 public class Register {
+    public String getUsername() {
+        return username;
+    }
+
     @Schema(description = "логин")
     @NotBlank
     @Size(min = 4, max = 32)
